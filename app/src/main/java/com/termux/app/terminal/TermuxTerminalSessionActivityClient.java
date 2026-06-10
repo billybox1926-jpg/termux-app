@@ -309,6 +309,9 @@ public class TermuxTerminalSessionActivityClient extends TermuxTerminalSessionCl
         // be stale, like current session not selected or scrolled to.
         checkAndScrollToSession(session);
         updateBackgroundColor();
+        // Also check for font and colors when session changes, to handle the case where
+        // Termux is started from a widget/shortcut and the session is ready immediately. (#4849)
+        checkForFontAndColors();
     }
 
     void notifyOfSessionChange() {
