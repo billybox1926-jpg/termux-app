@@ -179,14 +179,16 @@ public class AndroidUtils {
         // multiline values will be ignored
         Pattern propertiesPattern = Pattern.compile("^\\[([^]]+)]: \\[(.+)]$");
 
+        Process process = null;
+        BufferedReader bufferedReader = null;
         try {
-            Process process = new ProcessBuilder()
+            process = new ProcessBuilder()
                 .command("/system/bin/getprop")
                 .redirectErrorStream(true)
                 .start();
 
             InputStream inputStream = process.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line, key, value;
 
             while ((line = bufferedReader.readLine()) != null) {
@@ -199,11 +201,20 @@ public class AndroidUtils {
                 }
             }
 
-            bufferedReader.close();
-            process.destroy();
-
         } catch (IOException e) {
             Logger.logStackTraceWithMessage("Failed to get run \"/system/bin/getprop\" to get system properties.", e);
+        } finally {
+            // Fix for issue #5144: always close streams and destroy process to prevent resource leaks
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    Logger.logStackTraceWithMessage("Failed to close getprop reader.", e);
+                }
+            }
+            if (process != null) {
+                process.destroy();
+            }
         }
 
         //for (String key : systemProperties.stringPropertyNames()) {
