@@ -1,4 +1,4 @@
-package com.termux.app.api.file;
+﻿package com.termux.app.api.file;
 
 import android.content.Context;
 import android.content.Intent;
@@ -156,7 +156,7 @@ public class FileReceiverActivity extends AppCompatActivity {
                 try {
                     InputStream in = getContentResolver().openInputStream(uri);
                     // Switch back to UI thread for dialog interaction
-                    runOnUiThread(() -> promptNameAndSave(in, attachmentFileName));
+                    runOnUiThread(() -> promptNameAndSave(in, finalAttachmentFileName));
                 } catch (Exception e) {
                     runOnUiThread(() -> {
                         showErrorDialogAndQuit("Unable to handle shared content:\n\n" + e.getMessage());
@@ -296,3 +296,4 @@ public class FileReceiverActivity extends AppCompatActivity {
     }
 
 }
+
