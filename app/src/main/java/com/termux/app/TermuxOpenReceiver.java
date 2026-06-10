@@ -94,10 +94,14 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
         if (contentTypeExtra == null) {
             String fileName = fileToShare.getName();
             int lastDotIndex = fileName.lastIndexOf('.');
-            String fileExtension = fileName.substring(lastDotIndex + 1);
-            MimeTypeMap mimeTypes = MimeTypeMap.getSingleton();
-            // Lower casing makes it work with e.g. "JPG":
-            contentTypeToUse = mimeTypes.getMimeTypeFromExtension(fileExtension.toLowerCase());
+            if (lastDotIndex >= 0 && lastDotIndex < fileName.length() - 1) {
+                String fileExtension = fileName.substring(lastDotIndex + 1);
+                MimeTypeMap mimeTypes = MimeTypeMap.getSingleton();
+                // Lower casing makes it work with e.g. "JPG":
+                contentTypeToUse = mimeTypes.getMimeTypeFromExtension(fileExtension.toLowerCase());
+            } else {
+                contentTypeToUse = null;
+            }
             if (contentTypeToUse == null) contentTypeToUse = "application/octet-stream";
         } else {
             contentTypeToUse = contentTypeExtra;
