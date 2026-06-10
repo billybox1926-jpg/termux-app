@@ -275,8 +275,11 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
             ExecutionCommand executionCommand = termuxSessions.get(i).getExecutionCommand();
             processResult = mWantsToStop || executionCommand.isPluginExecutionCommandWithPendingResult();
             termuxSessions.get(i).killIfExecuting(this, processResult);
-            if (!processResult)
-                mShellManager.mTermuxSessions.remove(termuxSessions.get(i));
+            if (!processResult) {
+                synchronized (mShellManager.mTermuxSessions) {
+                    mShellManager.mTermuxSessions.remove(termuxSessions.get(i));
+                }
+            }
         }
 
 
