@@ -967,8 +967,8 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
         TermuxSession termuxSession;
         for (int i = 0, len = mShellManager.mTermuxSessions.size(); i < len; i++) {
             termuxSession = mShellManager.mTermuxSessions.get(i);
-            String shellName = termuxSession.getExecutionCommand().shellName;
-            if (shellName != null && shellName.equals(name))
+            ExecutionCommand ec = termuxSession.getExecutionCommand();
+            if (ec != null && ec.shellName != null && ec.shellName.equals(name))
                 return termuxSession;
         }
         return null;
