@@ -151,8 +151,19 @@ public class FileReceiverActivity extends AppCompatActivity {
             if (attachmentFileName == null) attachmentFileName = subjectFromIntent;
             if (attachmentFileName == null) attachmentFileName = UriUtils.getUriFileBasename(uri, true);
 
-            InputStream in = getContentResolver().openInputStream(uri);
-            promptNameAndSave(in, attachmentFileName);
+            // Offload potentially blocking I/O to a background thread
+            new Thread(() -> {
+                try {
+                    InputStream in = getContentResolver().openInputStream(uri);
+                    // Switch back to UI thread for dialog interaction
+                    runOnUiThread(() -> promptNameAndSave(in, attachmentFileName));
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        showErrorDialogAndQuit("Unable to handle shared content:\n\n" + e.getMessage());
+                        Logger.logStackTraceWithMessage(LOG_TAG, "handleContentUri(uri=" + uri + ") failed", e);
+                    });
+                }
+            }).start();
         } catch (Exception e) {
             showErrorDialogAndQuit("Unable to handle shared content:\n\n" + e.getMessage());
             Logger.logStackTraceWithMessage(LOG_TAG, "handleContentUri(uri=" + uri + ") failed", e);
