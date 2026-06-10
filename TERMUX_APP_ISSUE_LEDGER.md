@@ -2,12 +2,13 @@
 
 ## Summary
 - Total upstream open issues: 474
-- Fixed in this fork: 3 (so far in this session)
+- Fixed in this fork: 4 (so far in this session)
 - Remaining actionable: ~471
 
 ## Fixed Issues (this session)
 
 ### App repo (termux-app)
+- #5047 Missing PendingIntent.FLAG_IMMUTABLE causes crash on Android 12+ → Fixed (added FLAG_IMMUTABLE to 4 PendingIntent calls in 3 files) — commit e108bb62 — CI pending
 - #5144 Resource leak: Streams and Process not closed in AndroidUtils.getSystemProperties() → Fixed (finally block for cleanup) — commit a8390f92 — CI pending
 
 ### Package repo (termux-api-package)  
