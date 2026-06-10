@@ -152,7 +152,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
      * If between onResume() and onStop(). Note that only one session is in the foreground of the terminal view at the
      * time, so if the session causing a change is not in the foreground it should probably be treated as background.
      */
-    private boolean mIsVisible;
+    private volatile boolean mIsVisible;
 
     /**
      * If onResume() was called after onCreate().
