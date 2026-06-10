@@ -51,7 +51,12 @@ public class TermuxSessionsListViewController extends ArrayAdapter<TermuxSession
 
         TextView sessionTitleView = sessionRowView.findViewById(R.id.session_title);
 
-        TerminalSession sessionAtRow = getItem(position).getTerminalSession();
+        TermuxSession termuxSession = getItem(position);
+        if (termuxSession == null) {
+            sessionTitleView.setText("null session");
+            return sessionRowView;
+        }
+        TerminalSession sessionAtRow = termuxSession.getTerminalSession();
         if (sessionAtRow == null) {
             sessionTitleView.setText("null session");
             return sessionRowView;
