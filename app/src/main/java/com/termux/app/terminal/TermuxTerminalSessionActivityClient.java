@@ -160,9 +160,12 @@ public class TermuxTerminalSessionActivityClient extends TermuxTerminalSessionCl
         boolean isPluginExecutionCommandWithPendingResult = false;
         TermuxSession termuxSession = service.getTermuxSession(index);
         if (termuxSession != null) {
-            isPluginExecutionCommandWithPendingResult = termuxSession.getExecutionCommand().isPluginExecutionCommandWithPendingResult();
-            if (isPluginExecutionCommandWithPendingResult)
-                Logger.logVerbose(LOG_TAG, "The \"" + finishedSession.mSessionName + "\" session will be force finished automatically since result in pending.");
+            ExecutionCommand ec = termuxSession.getExecutionCommand();
+            if (ec != null) {
+                isPluginExecutionCommandWithPendingResult = ec.isPluginExecutionCommandWithPendingResult();
+                if (isPluginExecutionCommandWithPendingResult)
+                    Logger.logVerbose(LOG_TAG, "The \"" + finishedSession.mSessionName + "\" session will be force finished automatically since result in pending.");
+            }
         }
 
         if (mActivity.isVisible() && finishedSession != mActivity.getCurrentSession()) {
