@@ -1,0 +1,490 @@
+﻿# TERMUX_APP_ISSUE_LEDGER
+## Bucket A
+- #: [Bug]: Ctrl+PgUp Not registering
+- #: [Bug]: pkg update && pkg upgrade failed
+- #: [Bug]:
+- #: [Bug]: Crash for termux-notification
+- #: [Bug]: Resource leak: Streams and Process not closed in AndroidUtils.getSystemProperties() on IOException
+- #: [Bug]: Termux Usr Share Fonts Ttf Bug
+- #: [Bug]: google-genai installation fails on Termux
+- #: [Bug]: error completing install of intltool
+- #: [Bug]:Serious 404 Repository Errors and Environment Crashes on Android
+- #: [Bug]: the control character "^[" (ESC unicode: 27) crash termux when pasted
+- #: Fixed: sha256sums typo in debug_build.yml
+- #: [Bug]: termux-storage-get hangs, never prompts for a file
+- #: [Bug]: Potential main-thread blocking risk
+- #: [Bug]: Yet another potential ANR / main-thread blocking risk 
+- #: [Bug]: UI Flicker in Session Tab When Switching Sessions While Running Codex CLI
+- #: [Bug]: Samsung OneUI 8.x: Performance issue with Termux app in the background
+- #: [Bug] or [Feature]?: Distorted semigraphics (triangles)
+- #: [Bug]: ctrl+j to enter via KDE Connect is not working
+- #: [Bug]: GPG signiatures broken or missing, dpkg extremely outdated
+- #: [Bug]: Terminal session notification does not update session name when renamed via long-press
+- #: [Bug]:Missing PendingIntent.FLAG_IMMUTABLE causes crash on Android 12+ (API 31+)
+- #: [Bug]: One UI 8.x: big CPU cores are never used in tested Termux/proot workloads
+- #: [Bug]: Termux 0.118.3 crashes on startup after fresh install [Android 16]
+- #: [Bug]: Crashed
+- #: [Bug]: No Keyboard overlay after Mainline Services update on Android 16.
+- #: [Bug]: Help Failed to download and build `cffi==2.0.0`
+- #: [Bug]: Soft keyboard flickers and disappears when returning to Termux
+- #: [Bug]: Syncthing fails after upgrade to version 2.0.15
+- #: [Bug]: can't be install in phone second space
+- #: [Bug]: crash report
+- #: [Bug]: ZWJ is broken
+- #: [Bug]: Weird visual spacing of italicized text in a text editor
+- #: [Bug]: Grapheme cluster rendering faulty / inconsitent
+- #: [Bug]: Termux refuses to open / download files.
+- #: [Bug]: Termux startup scripts and crond behavior issues on Android 13
+- #: [Bug]: App crashes when trying to install nix inside of debian proot-distro
+- #: [Bug]: Cumulative ghost space in sd card
+- #: Crash
+- #: [Bug]: The. l2 s.coreutils's error is due to a problem with the Link2symlink mechanism of the termux.
+- #: [Bug]: Extra keys glyph rendering inconsistent
+- #: [Bug]: Crash Message Unknown package com.termux.api
+- #: [Bug]:Cannot hide extra-key
+- #: [Bug]: Bad Address, can't cd into /sdcard !!
+- #: [Bug]: Background color not respected when started with scripts
+- #: [Bug]: emacs tutorilal alt-v with external keybolard comes out clipboard
+- #: [Bug]: termux-setup-storage doesnΓÇÖt create external-1 for USB drive on GrapheneOS
+- #: [Bug]: suddenly close
+- #: [Fix]: Share data between Termux and Android applications
+- #: [Bug]: Report Crash When After Exiting Neovim
+- #: [Bug]: zsh colors
+- #: [Bug]: Crash when switching between Dex and non-Dex
+- #: [Bug]: pip install psutil doesn't work
+- #: [Bug]: Affects both Termux's Ubuntu & Arch, so it's a Termux bug: Julia's binary aarch64 now can't compile many packages.
+- #: [Bug]:
+- #: [Bug]: escape-seq styling lost after resizing
+- #: [Bug]: MIUI/Xiaomi HyperOS Mini Window Flickering Issue
+- #: [Bug]: ctrl space as prefix doesnot work in tmux
+- #: [Bug]: Selecting text in `tilde` editor doesn't work properly
+- #: [Bug]: Software keyboard won't show at startup if "use-black-ui = true" in latest CI build
+- #: [Bug]: pasting ESC char crashes the app
+- #: [Bug]: Termux randomly crashes without any error message when a minecraft server is running
+- #: "extra-keys" of "termux.properties" malfunctioning
+- #: [Bug]: Termux Setup Storage Error  Error Code: 200  Error Message (FileUtils Error):  Creating ~/storage directory file at path "/data
+- #: [Bug]: Error in ResultReturner
+- #: [Bug]: weird thing happened and then app crashed
+- #: [Bug]: Termux app crash when sharing text with very long title
+- #: [Bug]: UI misalignment on "New named session" / "Set session name" screen
+- #: [Bug]: termux-reload-settings doesn't apply configuration in termux.properties (even after device restart)
+- #: Bad mirrors are still detected as available
+- #: [Bug]: `termux-change-repo` dies with -9 (oom?)
+- #: [Bug]: GPG Error during Termux Update in WSA Environment (Subprocess apt-key exited unexpectedly)
+- #: [Bug]: Devan─ügar─½ characters not rendered correctly
+- #: [Bug]: Symlinking `~/downloads` results in truncated shared file
+- #: [Bug]: An error returned when use SSH with key in Tergent after update
+- #: Bug:multiple keys press
+- #: [Bug]: termux-job-scheduler crashes?
+- #: [Bug]: sshd no longer works
+- #: [Bug]: Unable to Type in Termux with Microsoft SwiftKey
+- #: [Bug]: Multiple " - " whenever I use termux
+- #: [Bug]: The command "termux-setup-storage" is not working
+- #: [Bug]: Termux doesn't apply colors.properties
+- #: kbdless manpage
+- #: [Bug]: Flask Server in Termux Requires Focus Switch to Process Requests
+- #: [Bug]: `extra-keys` configuration fails to parse backslash (`\`) character in `termux.properties`
+- #: [Feature report]: self-updatable application
+- #: rc funct keys
+- #: [Bug]: Character offset issue
+- #: [Bug]: Termux XFCE installation failing in version 118.0
+- #: [Bug]: termux-setup-storage fails silently and randomly
+- #: [Bug]: Random crash
+- #: [Bug]: Crashing after running wine(and opening wps program) in proot-distro (such as debian) using DE XFCE
+- #: [Bug]: termux not recognizing caps-lock as ctrl on physical keyboard
+- #: [Bug]: expand/collapse notification-bar using `cmd` failed 
+- #: [Bug]: the public key is not available
+- #: [Bug]: Slightly misaligned powershell symbols
+- #: Text formatting breaking when phone rotated and copy has additional spaces 
+- #: [Bug]: virtual keyboard: Ctrl key followed by characters in the extra keys row is not detected
+- #: [Bug]: too many letters 
+- #: [Bug]: Unable to type in termux using external braille keyboard
+- #: [Bug]: Termux fails to start after a few days of being installed with bindService crash
+- #: [Bug]: Closing termux android window just kills termux
+- #: [Bug][Proposal]: New Termux app versionCode spec to solve app store issues 
+- #: [Bug]: Some characters are squished when using certain fonts
+- #: Arrow keys not working on samsung keyboard[Bug]: 
+- #: [Bug]: First word repeats when using "swype" to type.
+- #: [Bug]: Memory
+- #: [Bug]: termux-file-editor running after sharing links with unknown/not included uri schemes
+- #: [Bug]: Keyboard hides when copying text to clipboard in Termux
+- #: [Bug]: text input view cannot work when bluetooth keyboard is connected
+- #: strange glitch happening when using buttons
+- #: [Bug]: termux crash
+- #: Scrolling through terminal output is hard
+- #: [Bug]: Fullscreen don't work with android 13
+- #: Cursor colour turns grayish black on turning on dark mode.
+- #: [Bug]: Termux terminal focus reporting is a bug or not implemented
+- #: [Bug]: 
+- #: [Bug]: when signature termux-app with system key, it seems not work.
+- #: [Bug]: termux-open does not seem to work with Android 13 (should it?)
+- #: [Bug]: Incorrect handling of "Erase in Line" on wrapped line
+- #: [Bug]: Why can't my computer connect to termux with ssh?
+- #: [Bug]: termux inconsistently crashes when resizing
+- #: [Bug]: Termux Auto Crash 
+- #: [Bug]: Termux text select -> copy removes newlines
+- #: [Bug]: `termux-open-url` opens 1 page when called rapidly, and sometimes crashes
+- #: [Bug]: "soft keyboard only if no hardware keyboard" doesn't always work
+- #: [Bug]: sometimes backspace deletes many characters
+- #: dpkg: error: cannot access archive '/data/data/com.termux/cache/apt/archives/less_633-1_aarch64.deb'
+- #: [Bug]: ^\ (SIGQUIT) shortcut doesn't work on QWERTZ layout
+- #: [Bug]: DocumentsUI crash
+- #: [Bug]: onHandleIntent not firing when calling RUN_COMMAND service from module
+- #: [Bug]: Error while run script php
+- #: [Bug]: When a hardware keyboard is connected and Termux is in the foreground, if Home or Recent apps buttons are pressed then the software keyboard becomes unresponsive
+- #: [Bug]: xdg-open can't open files containing % character.
+- #: [Bug]: its a wierd bug. Pasting an emoji with openboard crashes termux.
+- #: [Bug]: terminal characters shaking (video)
+- #: [Bug]: The LICENSE file describing termux-shared does not appear to allow the use case described in the wiki.
+- #: [Bug]: last character gets stripped on STDIN
+- #: [Bug]: with a hardware keyboard, random missing key presses / keys swapped
+- #: Can't start or uninstall termux
+- #: [Bug]: Termux crashed.
+- #: Access to Termux private storage directory on External Storage (SD card) stopped working
+- #: [Bug]: Invisible session number text in toast message
+- #: [Bug]: termux-usb -l loads infinity
+- #: [Bug]: The bootstrap package should be built along with the apk in F-Droid build
+- #: [Bug]: Text input mode cannot be changed
+- #: [Feature]: add timestamps to crash report filename.
+- #: This is a question
+- #: [Bug]: Termux randomly starts itself
+- #: [Bug]: Termux can't connect to internet anyway
+- #: [Bug]: Wrong TERM set
+- #: [Bug]:  Termux-storage-setup Crash
+- #: [Bug]: Termux special keys comes with a big black space
+- #: [Bug]: Cannot ping domains with roman symbols?
+- #: [Bug]: physical keyboard Fn key not work
+- #: [Bug]: Hardware keyboard Alt+Ctrl+key is not working
+- #: [Bug]: Keyboard sometimes does not pop up
+- #: [Bug]: F-Droid signatures
+- #: [Bug]: Written file corrupted via Storage Access Framework on Android 11
+- #: [Bug]:  terminal newlines sometimes after switching back from long time get messed upa
+- #: [Bug]: spaces in commands get deleted
+- #: [Bug]: Can't manipulate files from external app
+- #: [Bug]: TMPDIR is not wiped correctly
+- #: [Bug]: Key press bug 
+- #: ╦ïCTRL ALT -╦ï dont change font size
+- #: Termux does not work on MiReader
+- #: Continuous haptic bell / ^[OS characters inserted
+- #: Line breaks and copy issues
+- #: Extra key view not rescaling after termux-reload-settings 
+- #: Termux Android Things Crash First Launch
+- #: Termux doesn't terminate ssh connection on exit
+- #: Force closes on external 4k display on a Chromebook
+- #: bidi behavior inconsistent; possibility to enable/disable bidi in termux settings? 
+- #: ChromeOS set to Dvorak, Termux uses Qwerty
+- #: Keyboard backspace key sends DEL
+- #: Powerline fonts doesn't work when using Tmux remotely within a local Tmux session
+- #: Letters being added after any commands not in the dictionary (Samsung keyboard with "Auto check spelling" enabled)
+- #: Ctrl+Alt shortcut modifier change breaks Pixel C Keyboard
+- #: Holding any key on chrome OS doesn't send repeated key presses
+- #: big crash bug
+- #: halfwidth/fullwidth key doesn't work since 0.38
+- #: Font broken on "i" and "l"
+- #: termux cannot take the underlined candidates with soft keyboards
+- #: Blackberry Priv keyboard problem (Alt sends escape)
+- #: Ctrl key with Sogou Pinyin doesn't work
+- #: ESC key does not work with bluetooth keyboard and Google Pinyin input
+
+## Bucket B
+- #: [Feature]: Stylize GitHub as "GitHub" in the app and in related resources
+- #: [Feature]: terminal-view Documentation not available
+- #: [Bug]: termux.properties doesn't work when it's a symlink
+- #: [Feature]: A developer-signed, non-debuggable variant of Termux on GitHub Releases
+- #: [Feature]: Ability to use emacs shortcuts
+- #: [Feature]: OSC sequence to change soft keyboard mode
+- #: [Feature]: Confirmation when exiting from notification
+- #: FIDO2/Webauthn support
+- #: [Feature]: Add Blink Text Support to Termux Shell
+- #: [Bug]: Run KMM on termux 
+- #: [Feature]: add support for right-to-left languages
+- #: [Feature]: Support protocol scheme / Android App Links
+- #: How to remap volume keys?
+- #: Integrated graphics (VNC/SDL2)
+- #: Terminal emulation: allow configuration of string sent by backspace key
+- #: Kotlin adoption
+- #: feature request: request for some accessibility impruvments
+- #: Mouse tracking translates dragging with finger down to scroll wheel events
+- #: Configuration to invert tap and long press actions in Select URL
+- #: set custom brightness for termux 
+- #: Automatic reading of output with a screenreader
+- #: Hardware Keyboard Mapping
+- #: Use same color for bold text
+- #: [Feature Request] Double tap word selection.
+- #: Showing realtime images/videos with Termux?
+- #: Add right-to-left languages support
+- #: Are javadocs for termux source online anywhere?
+- #: True italic font support
+- #: Notify user whenever background session buffer changes
+- #:  [Feature Request] Termux as a downloader
+- #: Change location of ~/bin/termux-url-opener
+- #: Allow adjusting line-height
+- #: Make the ~/bin/termux-url-opener script run in background
+- #: Unable to use ctrl emulation if volume keys are used for navigation
+- #: Add Talkback support
+- #: Can termux access phone's bluetooth adapter?
+- #: Feature Request: Recognize URL's to open in browser
+- #: Multiplex control key
+- #: launcher mode support?
+- #: chromecast support
+- #: Feature Request: sixel graphics mode
+- #: Hide extra keys row when Keyboard is hidden
+- #: Add "volup key" to new extra keys panel
+- #: Enable Smooth Scrolling
+- #: Support for terminal bell as a notification
+- #: pageUp/Down gesture supported as pageUp/Down keys (or mouse wheel)
+- #: Change keyboard type when asking for a password
+- #: VR mode: Support for Steroscopic viewing and head tracking
+- #: Add swipe gestures to switch between open terminals
+- #: Option to get previous behavior with respect to hiding keyboard and entering ESC
+- #: Add support for mouse gestures. 
+
+## Bucket C
+- #: [Feature]: CLI commands to manage sessions
+- #: [Feature]: Please Add Support For Bun.js Runtime
+- #: [Feature]:  when i install homeassistant : pip subprocess to install build dependencies did not run successfully. exit code:1
+- #: [Feature]: refreshing repo and upgrading after unpacking a bootstrap.
+- #: [Feature]: Different font sizes for each session.
+- #: [Feature]: add shortcuts to open existing session by index
+- #: [Feature]: Exit sessions through the toolbar
+- #: [Feature]: non-primary user bootstrap functionality
+- #: Terminal Sessions change number
+- #: Gesture navigation makes opening session drawer nearly impossible
+- #: Option to disable/customise heads-up notification for background sessions
+- #: With no menu button, I can't find a way to close a session
+- #: termux-clipboard is not so easy to install (in order to support copy paste via pbcopy, pbpaste commands)
+- #: Inconsistent touch response behavior within multiple pane screen session
+
+## Bucket D
+- #: [Feature]: Separate nonfree packages into a distinct Termux repository
+- #: [Feature]: Ability to inject `init.sh` or `boot.sh` into the APK
+- #: [Bug]: Termux auto delete application on PM2 after reboot device
+- #: [Feature]: Is it possible to build termux-app with pacman as the default package manager?
+- #: Feature: Lightweight flavor of the app without package management
+- #: {Idea} is it possible to keep termux boot services open? 
+- #: Want To Close Termux-API When We Exit Termux
+
+## Bucket E
+- #: [Feature]: App Report Issue feature should include detailed CPU information
+- #: Report Text
+- #: [README] Bintray repository hosting shut down | Error 403 Forbidden | Error 404
+- #: TIOCGWINSZ reports zero window rows/cols until screen is rotated
+
+## Bucket F
+- #: [Feature]: Optional Camera and Microphone Permission Toggles
+- #: [Feature]: declare MANAGE_VIRTUAL_MACHINE permission
+- #: [Feature]: Auto-generate PIN and Enhanced Device Management
+- #: [Feature]: Support to run scripts when invoked through sharing to Termux from other apps (Android Go)
+- #: Two changes for Android/Fire TV users
+- #: [Feature]: Automatically update Termux on Android 14 with F-Droid
+- #: [Feature]: Render the "Device Info" and "App Info" sections as tables, not lists.
+- #: [Feature]: See a list of apps that have permission to access termux storage, and manage the permission
+- #: [Feature]: Zoom on device without touchscreen (WSA)
+- #: Revisit the Android W^X problem
+- #: Audio not working when connected to Android Auto
+- #: Not able to connect Mosquitto which is running On ANDROID(TERMUX)
+- #: Termux in android TV not working as should be 
+
+## Bucket G
+- #: External Compatibility Testing for Newer Build JDKs in termux-app
+- #: [Feature]: Flick down on extra-keys row
+- #: Vertical swipe close keyboard
+- #: [Feature]: Add parameter --display to  `am start` 
+- #: [Patch] | PR BLOCKED . posting patch as issue instead | idle timeout : idle drain safe guard . remove from power intensive apps  
+- #: Add shortcut.toggle-input-mode (HW keyboard shortcut for extras-row Γçä text-input swipe)
+- #: [Feature]: Make terminal toolbar toggle scriptable
+- #: IME switching fails when an external keyboard is attached
+- #: JIS external keyboard keys (YEN/RO/HENKAN/MUHENKAN/ZENKAKU_HANKAKU) are still not handled in current Termux
+- #: [Feature]: Support the Kitty image protocol to show images
+- #: [Feature]: termux-file-editor: default filename
+- #: [Feature]: Drag and drop support
+- #: [Feature]: Stream execution results for run command
+- #: Feature request: per-app orientation lock in Settings UI
+- #: [Feature]: please improve survival rate
+- #: [Feature]: Allow arbitrary key code (sequence) as special key
+- #: [Feature]: Allow apps to enable long-press right-click emulation
+- #: [Feature]: Configure Text Input View
+- #: [Feature]: dynamic shortcuts for main termux-app icon
+- #: [Feature]: termux passwordless ssh server
+- #: [Feature]: Use the de-facto standard VGA color palette as the default color scheme for termux
+- #: [Feature]: Wear OS Companion
+- #: [Feature]: Bypassing Phantom Killer Using a LADB-Like Solution
+- #: [Feature]: Indicate `stty size` While Resizing
+- #: [Feature]: claude code key mapping
+- #: [Feature]:  mouse supporting in shell readline
+- #: [Feature]: Accessibility Improvements
+- #: [Feature]: Support swipe.down on extra-keys for Ctrl+C
+- #: [Feature]: Search in terminal contents (program output)
+- #: [Feature]: Move termux.properties and related file preferences into Termux's settings
+- #: [Feature]: Use sentence case for regular non-terminal view text
+- #: [Feature]: interactive RUN_COMMAND
+- #: [Feature]: Pass URI Intent as Text to Termux
+- #: [Feature]: Camera access
+- #: [Feature]: MainActivity should accept the RUN_COMMAND intent.
+- #: [Feature]: publish Termux on Accrescent
+- #: [Feature]: Close app window on logout from shell
+- #: [Bug]: can't change shell to zsh
+- #: [Feature]: termux-app should detect phantom process killer enabled
+- #: [Feature]: Multiple Extra Key Panels?
+- #: [Feature]: Toggle over keyboard keys
+- #: Use SwiftTerm instead?
+- #: [Feature]: Enhancing Termux Accessibility for Visually Impaired Users
+- #: [Feature]: Mouse tracking shouldn't block scrollback
+- #: Screen Zoom support for one hand use
+- #: [Feature]: colors.properties separate for light and dark theme
+- #: [Feature]: Hack key bindings
+- #: [Feature]: remove from the recent tasks list on exit
+- #: [Feature]: Make the color of the extra buttons changeable
+- #: [Feature]: Actual Navigation with Touch Screen
+- #: Proposal for adding accessibility in Termux
+- #: [Feature]: Enable "paste" keys of "Unexpected Keyboard"
+- #: [Feature]: Custom hard keyboard key repeat speed
+- #: [Feature]: Support pasting with Ctrl + shift + V
+- #: [Feature]: `termux-about.log` should be `termux-about.md`.
+- #: [Feature] Support secondary display
+- #: [Feature]: Support "termux:" scheme when temux-scheme-opener script is created.
+- #: [Feature]: Change the mouse wheel scroll rate.
+- #: [Feature]: overlay for preventing termux-app from going to background
+- #: CTRL + space bar should become CTRL-@
+- #: [Feature]: Material 3 design
+- #: [Feature]: Screen dimming in Termux settings
+- #: [Feature]: Custom bell sound
+- #: [Feature]: over-scroll and nested-scrolling  animation in termux terminal-emulator
+- #: [Feature]: allow changing max terminals limit
+- #: [Feature]: incremental wakelock
+- #: [Feature]: Support for multiple sets of extra-keys
+- #: [Feature]: Expand soft keyboard popups to radial menus
+- #: Scrolling screenshot 
+- #: [Feature]: Remove window from the recent apps menu on ctrl-d
+- #: Fire TV support?
+- #: [Feature]: Corrective releases (revisions?)
+- #: [Feature]: add support to connect with usb-serial instead of pseudo-tty
+- #: Double Typing Characters when using Hardware Keyboard
+- #: [Feature]: option to hide extra key bar when IME is hidden
+- #: [Feature]: Need Double-width rendering of ambiguous characters 
+- #: [Feature]: hide plugin desktop icon
+- #: [Feature]: shell cmd to hide soft keyboard
+- #: [Feature]: Allow different zoom levels in Samsung DeX / phone screen
+- #: [Feature]: Urls/Links Receiver
+- #: [Feature]: Support for CSI 14
+- #: [Feature]: Self-update
+- #: [Feature]: terminal background image support
+- #: [Feature]: Use same directory to resotore config file of termux, not seperately
+- #: [Feature]: request navigation bar
+- #: [Feature]: Multi-user support
+- #: [Feature]: Ability to handle termux terminal resolution inside ~/.termux/termux.properties
+- #: [Feature]: Support secondary users via binary patching and extra slashes
+- #: [Feature]:copy content from termux to other app
+- #: [Feature]: pass to URI to `termux-file-editor` which enables file saving
+- #: [Feature]: Need CSI 5 m (blink) support
+- #: [Feature]: Plugins without shared UID
+- #: [Feature]: A key for extra-keys which opens a menu to select a less commonly used `supported keys`
+- #: [Feature]: termux-file-editor
+- #: [Feature]: Add multiple popup keys for the extra keys
+- #: [Feature]: Support NerdFont double-width characters
+- #: [NOTICE] 2022-02-15 Termux Apps Vulnerability Disclosures
+- #: Let screen readers catch cursor position
+- #: [Feature]: separate termux for root
+- #: [Feature]: add 'Autofill password' to terminal toolbar
+- #: [Feature]: Add rebinding of hardware shortcuts.
+- #: [Feature]: cursor navigation by holding/pressing spacebar
+- #: [Feature]:  add `TextInput` to extra key row
+- #: [Feature]: add single button arrow keys in overlay keyboard
+- #: [Feature]: Scrolling by swiping in programs which expect <page up> and <page down> key presses for that
+- #: [Feature]: Enable Seedvault encrypted backups
+- #: [Feature]: Multiple file sharing to termux
+- #: [Feature]: Override the color of the status and navigation bar s
+- #: Presence of a border when running cli apps in termux
+- #: Autorepeat gets stuck when pressing two arrows or arrow+DEL/BKSP at the same time on extra keys bar
+- #: Asking for an 1x1 font (size)
+- #: Feature Request : Auto adjust font and app element sizes when Display Density (DPI) changed
+- #: copied text includes whitespace
+- #: Stop fling scroll anytime
+- #: Run termux-url-opener without opening terminal in background
+- #: Feature request: USB and getty
+- #: Python speech recognition not working.
+- #: Optionally send raw file data to termux-file-editor
+- #: Remove file save dialog before termux-file-editor call
+- #: Weird rendering when using specific shell theme and then recalling command history with long commands
+- #: Typing in Korean with an external keyboard
+- #: Please make shourcut icons adaptive
+- #: termux-url-opener just flashes when termux is currently open
+- #: hardware keyboard - modifier keys not delivered with cursor keys and page up / down
+- #: support for the Samsung S-pen button
+- #: touchscreen ime keyboard key"enter" and "backspace" invalid sometimes
+- #: Selection popup not visible at small font + bottom of screen
+- #: Text file navigation: keep cursor moving when holding VolUp+WASD
+- #: can no longer produce modifier Alt + Shift
+- #: URL picker: cannot copy multiline url
+- #: [RFE] Allow Termux Styles to define a color for extra keys background
+- #: Gboard keyboard can not be used properly in termux
+- #: Termux does not support immersive mode properly on Samsung One UI
+- #: German keyboard layout problem: '<' and '>' keys wrongly mapped
+- #: Toggling services like location services
+- #: Add ability to set combination prefix for hardware keyboard
+- #: Hardware Blackberry keyboard and CTRL+Y
+- #: can we set *keep screen on* option through command line ?
+- #: Some Termux key-bindings don't work on Chromebook (with hardware keyboard)
+- #: Virtual keyboard doesn't load in Chrome Tab 10
+- #: Termux not recognizing " character and ' character on chromebook os 77
+- #: On ChromeOS, in full-screen mode, with "shelf" auto-hiding enabled, Termux has a big chunk of unused space at the bottom of its display
+- #: Samsung Dex support - multiple windows 
+- #: Horizontal scrolling for vi
+- #: Long lines with \r are not handled properly
+- #: Adaptive icons in application shortcuts
+- #: double∩╝ìclick trigger tab
+- #: Unable to pause autoscrolling
+- #: default to the default key line when the property read for extra-keys fails
+- #: Text selection does not invert pure white characters
+- #: Turn off vibrate when using Extra Keys
+- #: Fingerprint reader proceseses as swung dash keystroke ~
+- #: Chromebook: single keystroke lag
+- #: Set term size via termux.properties
+- #: Physical keyboard: buttons CTRL, ESC, SHIFT are not working 
+- #: [Feature Request] Keyboard autocomplete suggestions
+- #: Increase scrollback
+- #: Adaptive icon looks bad on the dark background
+- #: Cannot share files with specific app
+- #: Notification text is too dark
+- #: Termux on rasperrby pi 3 with 7" screen aliasing
+- #: Support styled underlines
+- #: I can't write /
+- #: Scrolling sideways when autowrap is disabled
+- #: Visible bell?
+- #: Allowing to adjust line-height of termux
+- #: termux-file-editor does not modify original file but a copy in downloads
+- #: Request: horizontal mouse wheel (from left/right touch swipes) 
+- #: Software keyboard+ extra rows takes too much screen estate
+- #: chromeos: better support for using terminal mouse events AND selection/copy?
+- #: Alt-V volume keybinding interferes with readline
+- #: Allow swipes to perform custom actions
+- #: Add hundreds of downloadable fonts to termux (discussion)
+- #: Console renders standard variants as emoji's
+- #: Request: Option to open Help Pages in Browser
+- #: WebView disappear after exiting and re-entering app
+- #: Illegible background using "Black on white" or "White on black" themes
+- #: Termux:Sudo Addon proposal
+- #: more Mouse Click events
+- #: Bold text enforces bright colours
+- #: Handling ACTION_EDIT in TermuxOpenReceiver
+- #: Better hotkey support for hardware keyboards
+- #: Add a custom url handler
+- #: keyboard overlapping cli input
+- #: Support multicast DNS (mdns) via MulticastLock
+- #: Configure what volume buttons do?
+- #: Fullscreen / immersive mode option is gone
+- #: Not able to access SDCard on Chromebook.
+- #: Chromebook Flip in tablet mode: on-screen keyboard does not appear
+- #: Convert text navigation gestures into arrow key inputs
+- #: Auto-set TZ environment variable
+- #: Key Enter is sent repeatedly after start on chromebook after chsh -s zsh and back to bash
+- #: Launch scripts via app shortcuts
+- #: cut and paste on chromebook
+- #: Wallpaper
+- #: floating button idea
+- #: Small bar at top of terminal for the title
+- #: Support for disabling softkeyboard in case bluetoothkeyboard is present
+- #: Suggestion: pass in additional text in `termux-url-opener`
+- #: Caps lock key not working.
+
+
