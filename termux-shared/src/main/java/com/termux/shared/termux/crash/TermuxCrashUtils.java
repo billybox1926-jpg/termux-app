@@ -363,8 +363,16 @@ public class TermuxCrashUtils implements CrashHandler.CrashHandlerClient {
 
         // Send the notification
         NotificationManager notificationManager = NotificationUtils.getNotificationManager(termuxPackageContext);
-        if (notificationManager != null)
-            notificationManager.notify(nextNotificationId, builder.build());
+        if (notificationManager != null) {
+            try {
+                notificationManager.notify(nextNotificationId, builder.build());
+            } catch (SecurityException e) {
+                // On some devices (e.g. when a plugin sends a crash notification from a
+                // different package context), the notification manager may reject the
+                // notify call with "Package X does not belong to Y". Log and continue. (#5145)
+                Logger.logError(logTag, "Failed to send crash report notification: " + e.getMessage());
+            }
+        }
     }
 
     /**
