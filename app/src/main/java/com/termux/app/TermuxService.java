@@ -858,6 +858,11 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
         }
     }
 
+    /** Public wrapper for {@link #updateNotification()} to allow session title changes to refresh the notification. */
+    public void updateNotificationPublic() {
+        updateNotification();
+    }
+
 
 
 

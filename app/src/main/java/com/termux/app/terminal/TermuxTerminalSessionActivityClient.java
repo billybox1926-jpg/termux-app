@@ -133,6 +133,13 @@ public class TermuxTerminalSessionActivityClient extends TermuxTerminalSessionCl
         }
 
         termuxSessionListNotifyUpdated();
+
+        // Update the persistent notification so it reflects the new session name (#5048)
+        if (updatedSession == mActivity.getCurrentSession()) {
+            TermuxService service = mActivity.getTermuxService();
+            if (service != null)
+                service.updateNotificationPublic();
+        }
     }
 
     @Override
