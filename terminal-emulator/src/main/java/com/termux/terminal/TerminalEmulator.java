@@ -2592,6 +2592,11 @@ public final class TerminalEmulator {
         // Second: Replace all newlines (\n) or CRLF (\r\n) with carriage returns (\r).
         text = text.replaceAll("\r?\n", "\r");
 
+        // If text is empty after stripping control characters, nothing to paste.
+        // This prevents IllegalArgumentException in ByteQueue.write() when a bare
+        // ESC character (or other control-only input) is pasted. (#5119)
+        if (text.isEmpty()) return;
+
         // Then: Implement bracketed paste mode if enabled:
         boolean bracketed = isDecsetInternalBitSet(DECSET_BIT_BRACKETED_PASTE_MODE);
         if (bracketed) mSession.write("\033[200~");
