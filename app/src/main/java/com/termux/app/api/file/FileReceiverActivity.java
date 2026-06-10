@@ -177,6 +177,10 @@ public class FileReceiverActivity extends AppCompatActivity {
     }
 
     void promptNameAndSave(final InputStream in, final String attachmentFileName) {
+        if (in == null) {
+            showErrorDialogAndQuit("Unable to open input stream for file");
+            return;
+        }
         TextInputDialogUtils.textInput(this, R.string.title_file_received, attachmentFileName,
             R.string.action_file_received_edit, text -> {
                 // Offload file copy to background thread
