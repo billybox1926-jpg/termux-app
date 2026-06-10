@@ -1,4 +1,4 @@
-﻿package com.termux.app.api.file;
+package com.termux.app.api.file;
 
 import android.content.Context;
 import android.content.Intent;
@@ -151,6 +151,8 @@ public class FileReceiverActivity extends AppCompatActivity {
             if (attachmentFileName == null) attachmentFileName = subjectFromIntent;
             if (attachmentFileName == null) attachmentFileName = UriUtils.getUriFileBasename(uri, true);
 
+            final String finalAttachmentFileName = attachmentFileName;
+
             // Offload potentially blocking I/O to a background thread
             new Thread(() -> {
                 try {
@@ -296,4 +298,3 @@ public class FileReceiverActivity extends AppCompatActivity {
     }
 
 }
-
