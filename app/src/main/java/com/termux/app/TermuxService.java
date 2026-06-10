@@ -641,11 +641,11 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
         if (termuxSession != null) {
             ExecutionCommand executionCommand = termuxSession.getExecutionCommand();
 
-            Logger.logVerbose(LOG_TAG, "The onTermuxSessionExited() callback called for \"" + executionCommand.getCommandIdAndLabelLogString() + "\" TermuxSession command");
-
             // If the execution command was started for a plugin, then process the results
-            if (executionCommand != null && executionCommand.isPluginExecutionCommand)
+            if (executionCommand != null && executionCommand.isPluginExecutionCommand) {
+                Logger.logVerbose(LOG_TAG, "The onTermuxSessionExited() callback called for \"" + executionCommand.getCommandIdAndLabelLogString() + "\" TermuxSession command");
                 TermuxPluginUtils.processPluginExecutionCommandResult(this, LOG_TAG, executionCommand);
+            }
 
             // Synchronize on the sessions list to prevent concurrent modification
             // when other synchronized methods access it from different threads.
