@@ -937,10 +937,11 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
     }
 
     public synchronized TerminalSession getTerminalSessionForHandle(String sessionHandle) {
+        if (sessionHandle == null) return null;
         TerminalSession terminalSession;
         for (int i = 0, len = mShellManager.mTermuxSessions.size(); i < len; i++) {
             terminalSession = mShellManager.mTermuxSessions.get(i).getTerminalSession();
-            if (terminalSession.mHandle.equals(sessionHandle))
+            if (terminalSession.mHandle != null && terminalSession.mHandle.equals(sessionHandle))
                 return terminalSession;
         }
         return null;
