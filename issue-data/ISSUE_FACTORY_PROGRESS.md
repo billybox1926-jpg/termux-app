@@ -10,6 +10,27 @@ Reason: Needs runtime/device-specific verification or larger change; not safe fo
 Commit SHA: none
 CI: none
 
+## Issue #3478 — ViewPager pointerIndex out of range crash
+Status: Fixed
+Verification: GitHub Actions Build
+Files changed:
+- app/src/main/java/com/termux/app/terminal/io/SafeViewPager.java
+- app/src/main/res/layout/activity_termux.xml
+Code commit SHA:
+- 2a7d23b43ffedf8999ce94cf14455fbebeabf41f
+CI run ID:
+- 27276218332
+CI status:
+- success
+Artifacts:
+- Saved outside repo at C:\Users\Billy\Documents\GitHub\termux-app-artifacts\run-27276218332
+- apt-android-5: arm64-v8a, armeabi-v7a, x86, x86_64, universal, sha256sums
+- apt-android-7: arm64-v8a, armeabi-v7a, x86, x86_64, universal, sha256sums
+Notes:
+- SafeViewPager prevents the pointerIndex out of range crash by catching IllegalArgumentException in onInterceptTouchEvent and returning false.
+- activity_termux.xml now uses SafeViewPager for terminal_toolbar_view_pager.
+- Both Android 5 and Android 7 build matrices passed.
+
 ## Issue #5092 — UI-thread blocking in file-receive flow
 Status: Fixed
 Verification: GitHub Actions Build
