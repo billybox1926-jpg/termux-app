@@ -782,8 +782,10 @@ public final class TermuxService extends Service implements AppShell.AppShellCli
      * clients do not hold an activity references.
      */
     public synchronized void unsetTermuxTerminalSessionClient() {
-        for (int i = 0; i < mShellManager.mTermuxSessions.size(); i++)
-            mShellManager.mTermuxSessions.get(i).getTerminalSession().updateTerminalSessionClient(mTermuxTerminalSessionServiceClient);
+        synchronized (mShellManager.mTermuxSessions) {
+            for (int i = 0; i < mShellManager.mTermuxSessions.size(); i++)
+                mShellManager.mTermuxSessions.get(i).getTerminalSession().updateTerminalSessionClient(mTermuxTerminalSessionServiceClient);
+        }
 
         mTermuxTerminalSessionActivityClient = null;
     }
