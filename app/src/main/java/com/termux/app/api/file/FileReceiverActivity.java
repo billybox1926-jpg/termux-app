@@ -135,6 +135,10 @@ public class FileReceiverActivity extends AppCompatActivity {
     }
 
     void handleContentUri(@NonNull final Uri uri, String subjectFromIntent) {
+        if (uri == null) {
+            showErrorDialogAndQuit("No file URI received");
+            return;
+        }
         try {
             Logger.logVerbose(LOG_TAG, "uri: \"" + uri + "\", path: \"" + uri.getPath() + "\", fragment: \"" + uri.getFragment() + "\"");
 
