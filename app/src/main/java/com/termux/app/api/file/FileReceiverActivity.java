@@ -175,36 +175,44 @@ public class FileReceiverActivity extends AppCompatActivity {
     void promptNameAndSave(final InputStream in, final String attachmentFileName) {
         TextInputDialogUtils.textInput(this, R.string.title_file_received, attachmentFileName,
             R.string.action_file_received_edit, text -> {
-                File outFile = saveStreamWithName(in, text);
-                if (outFile == null) return;
+                // Offload file copy to background thread
+                new Thread(() -> {
+                    File outFile = saveStreamWithName(in, text);
+                    if (outFile == null) return;
+                    // UI updates after copy
+                    runOnUiThread(() -> {
+                        final File editorProgramFile = new File(EDITOR_PROGRAM);
+                        if (!editorProgramFile.isFile()) {
+                            showErrorDialogAndQuit("The following file does not exist:\n$HOME/bin/termux-file-editor\n\n"
+                                + "Create this file as a script or a symlink - it will be called with the received file as only argument.");
+                            return;
+                        }
+                        // Do this for the user if necessary:
+                        //noinspection ResultOfMethodCallIgnored
+                        editorProgramFile.setExecutable(true);
 
-                final File editorProgramFile = new File(EDITOR_PROGRAM);
-                if (!editorProgramFile.isFile()) {
-                    showErrorDialogAndQuit("The following file does not exist:\n$HOME/bin/termux-file-editor\n\n"
-                        + "Create this file as a script or a symlink - it will be called with the received file as only argument.");
-                    return;
-                }
-
-                // Do this for the user if necessary:
-                //noinspection ResultOfMethodCallIgnored
-                editorProgramFile.setExecutable(true);
-
-                final Uri scriptUri = UriUtils.getFileUri(EDITOR_PROGRAM);
-
-                Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE, scriptUri);
-                executeIntent.setClass(FileReceiverActivity.this, TermuxService.class);
-                executeIntent.putExtra(TERMUX_SERVICE.EXTRA_ARGUMENTS, new String[]{outFile.getAbsolutePath()});
-                startService(executeIntent);
-                finish();
+                        final Uri scriptUri = UriUtils.getFileUri(EDITOR_PROGRAM);
+                        Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE, scriptUri);
+                        executeIntent.setClass(FileReceiverActivity.this, TermuxService.class);
+                        executeIntent.putExtra(TERMUX_SERVICE.EXTRA_ARGUMENTS, new String[]{outFile.getAbsolutePath()});
+                        startService(executeIntent);
+                        finish();
+                    });
+                }).start();
             },
             R.string.action_file_received_open_directory, text -> {
-                if (saveStreamWithName(in, text) == null) return;
-
-                Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE);
-                executeIntent.putExtra(TERMUX_SERVICE.EXTRA_WORKDIR, TERMUX_RECEIVEDIR);
-                executeIntent.setClass(FileReceiverActivity.this, TermuxService.class);
-                startService(executeIntent);
-                finish();
+                // Offload file copy to background thread
+                new Thread(() -> {
+                    if (saveStreamWithName(in, text) == null) return;
+                    // UI updates after copy
+                    runOnUiThread(() -> {
+                        Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE);
+                        executeIntent.putExtra(TERMUX_SERVICE.EXTRA_WORKDIR, TERMUX_RECEIVEDIR);
+                        executeIntent.setClass(FileReceiverActivity.this, TermuxService.class);
+                        startService(executeIntent);
+                        finish();
+                    });
+                }).start();
             },
             android.R.string.cancel, text -> finish(), dialog -> {
                 if (mFinishOnDismissNameDialog) finish();
@@ -235,8 +243,10 @@ public class FileReceiverActivity extends AppCompatActivity {
             }
             return outFile;
         } catch (IOException e) {
-            showErrorDialogAndQuit("Error saving file:\n\n" + e);
-            Logger.logStackTraceWithMessage(LOG_TAG, "Error saving file", e);
+            runOnUiThread(() -> {
+                showErrorDialogAndQuit("Error saving file:\n\n" + e);
+                Logger.logStackTraceWithMessage(LOG_TAG, "Error saving file", e);
+            });
             return null;
         }
     }
