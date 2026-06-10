@@ -641,7 +641,9 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
             // will also show keyboard even if it was closed before opening url. #2111
             Logger.logVerbose(LOG_TAG, "Requesting TerminalView focus and showing soft keyboard");
             mActivity.getTerminalView().requestFocus();
-            mActivity.getTerminalView().postDelayed(getShowSoftKeyboardRunnable(), 300);
+            // Use a retry-based approach instead of a fixed 300ms delay to handle
+            // cases where window focus arrives late (e.g. returning via launcher). (#5014)
+            showSoftKeyboardWithRetry(3);
         }
     }
 
@@ -652,6 +654,24 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
             };
         }
         return mShowSoftKeyboardRunnable;
+    }
+
+    /**
+     * Show the soft keyboard with retry logic to handle late window focus delivery.
+     * When returning to Termux via launcher (not recents), the window focus may arrive
+     * after a fixed delay, causing showSoftInput to be ignored. This retries up to
+     * {@code maxRetries} times with increasing delays. (#5014)
+     */
+    private void showSoftKeyboardWithRetry(int maxRetries) {
+        if (maxRetries <= 0) return;
+        long delay = 100;
+        mActivity.getTerminalView().postDelayed(() -> {
+            if (mActivity.getTerminalView().hasWindowFocus()) {
+                KeyboardUtils.showSoftKeyboard(mActivity, mActivity.getTerminalView());
+            } else if (maxRetries > 1) {
+                showSoftKeyboardWithRetry(maxRetries - 1);
+            }
+        }, delay);
     }
 
 
