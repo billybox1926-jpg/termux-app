@@ -411,9 +411,12 @@ public final class ExtraKeysView extends GridLayout {
                     button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
                 }
 
-                button.setText(buttonInfo.getDisplay());
+                String displayText = buttonInfo.getDisplay();
+                button.setText(displayText);
                 button.setTextColor(mButtonTextColor);
-                button.setAllCaps(mButtonTextAllCaps);
+                // Only apply all-caps for ASCII labels to avoid corrupting
+                // non-ASCII glyphs (arrows, special chars) via toUpperCase().
+                button.setAllCaps(mButtonTextAllCaps && isAscii(displayText));
                 button.setPadding(0, 0, 0, 0);
                 button.setGravity(Gravity.CENTER);
                 button.setPaintFlags(button.getPaintFlags() | Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
@@ -680,6 +683,14 @@ public final class ExtraKeysView extends GridLayout {
         for (Object[] row : matrix)
             m = Math.max(m, row.length);
         return m;
+    }
+
+    private static boolean isAscii(String text) {
+        if (text == null) return true;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) > 127) return false;
+        }
+        return true;
     }
 
 }
