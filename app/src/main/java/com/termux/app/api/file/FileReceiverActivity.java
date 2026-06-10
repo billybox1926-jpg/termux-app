@@ -223,12 +223,12 @@ public class FileReceiverActivity extends AppCompatActivity {
         File receiveDir = new File(TERMUX_RECEIVEDIR);
 
         if (DataUtils.isNullOrEmpty(attachmentFileName)) {
-            showErrorDialogAndQuit("File name cannot be null or empty");
+            runOnUiThread(() -> showErrorDialogAndQuit("File name cannot be null or empty"));
             return null;
         }
 
         if (!receiveDir.isDirectory() && !receiveDir.mkdirs()) {
-            showErrorDialogAndQuit("Cannot create directory: " + receiveDir.getAbsolutePath());
+            runOnUiThread(() -> showErrorDialogAndQuit("Cannot create directory: " + receiveDir.getAbsolutePath()));
             return null;
         }
 
@@ -248,6 +248,8 @@ public class FileReceiverActivity extends AppCompatActivity {
                 Logger.logStackTraceWithMessage(LOG_TAG, "Error saving file", e);
             });
             return null;
+        } finally {
+            try { in.close(); } catch (IOException ignored) {}
         }
     }
 
