@@ -926,6 +926,7 @@ public final class TerminalView extends View {
 
     public boolean handleKeyCodeAction(int keyCode, int keyMod) {
         boolean shiftDown = (keyMod & KeyHandler.KEYMOD_SHIFT) != 0;
+        boolean ctrlDown = (keyMod & KeyHandler.KEYMOD_CTRL) != 0;
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_PAGE_UP:
@@ -938,6 +939,12 @@ public final class TerminalView extends View {
                     doScroll(motionEvent, keyCode == KeyEvent.KEYCODE_PAGE_UP ? -mEmulator.mRows : mEmulator.mRows);
                     motionEvent.recycle();
                     return true;
+                }
+                // When Ctrl is pressed (without shift), do not consume the event here.
+                // Let it fall through to KeyHandler.getCode() so the Ctrl modifier
+                // is included in the escape sequence (e.g. \033[5;5~ for Ctrl+PgUp).
+                if (ctrlDown) {
+                    return false;
                 }
         }
 

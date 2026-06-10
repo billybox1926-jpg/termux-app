@@ -23,6 +23,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Gravity;
+import android.graphics.Paint;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -413,6 +415,8 @@ public final class ExtraKeysView extends GridLayout {
                 button.setTextColor(mButtonTextColor);
                 button.setAllCaps(mButtonTextAllCaps);
                 button.setPadding(0, 0, 0, 0);
+                button.setGravity(Gravity.CENTER);
+                button.setPaintFlags(button.getPaintFlags() | Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
 
                 button.setOnClickListener(view -> {
                     performExtraKeyButtonHapticFeedback(view, buttonInfo, button);
