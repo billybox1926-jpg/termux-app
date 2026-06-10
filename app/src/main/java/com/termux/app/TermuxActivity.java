@@ -856,7 +856,9 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
 
     public void termuxSessionListNotifyUpdated() {
-        mTermuxSessionListViewController.notifyDataSetChanged();
+        // Ensure adapter notification always runs on the UI thread to prevent
+        // IllegalStateException from ListView when modified from background. (#5027)
+        runOnUiThread(() -> mTermuxSessionListViewController.notifyDataSetChanged());
     }
 
     public boolean isVisible() {
