@@ -1,28 +1,17 @@
-﻿# TERMUX_APP_FIRST_BATCH_PLAN
+# TERMUX_APP_FIRST_BATCH_PLAN
 
-## Selected Issues (Buckets A & B)
+## Selected Issues
 
-- Bucket A: #: [Bug]: Ctrl+PgUp Not registering
+- Bucket A: #5092: [Bug]: Yet another potential ANR / main-thread blocking risk 
+- Bucket A: #3478: [Bug]: Termux Auto Crash 
+- Bucket A: #152: big crash bug
+- Bucket B: #5128: [Patch] | PR BLOCKED . posting patch as issue instead | idle timeout : idle drain safe guard . remove from power intensive apps  
+- Bucket B: #4589: "extra-keys" of "termux.properties" malfunctioning
+- Bucket B: #3245: [Feature]: Need Double-width rendering of ambiguous characters 
+- Bucket B: #787: Are javadocs for termux source online anywhere?
 
-- Bucket A: #: [Bug]: pkg update && pkg upgrade failed
+## Rationale
 
-- Bucket A: #: [Bug]:
+First batch is limited to buckets A and B only: high-confidence app-code crashes and low-risk static/code-health fixes.
 
-- Bucket A: #: [Bug]: Crash for termux-notification
-
-- Bucket A: #: [Bug]: Resource leak: Streams and Process not closed in AndroidUtils.getSystemProperties() on IOException
-
-- Bucket A: #: [Bug]: Termux Usr Share Fonts Ttf Bug
-
-- Bucket A: #: [Bug]: google-genai installation fails on Termux
-
-- Bucket A: #: [Bug]: error completing install of intltool
-
-- Bucket A: #: [Bug]:Serious 404 Repository Errors and Environment Crashes on Android
-
-- Bucket A: #: [Bug]: the control character "^[" (ESC unicode: 27) crash termux when pasted
-
-
-### Rationale
-Issues chosen per lane priority: highâ€‘confidence bugs first, then lowâ€‘risk cleanâ€‘ups, up to 10 items.
-
+Do not batch-fix these automatically. Pick one issue, inspect source, make the smallest patch, and use GitHub Actions as the gate.

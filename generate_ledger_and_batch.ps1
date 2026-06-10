@@ -1,71 +1,164 @@
-# PowerShell script to generate TERMUX_APP_ISSUE_LEDGER.md and TERMUX_APP_FIRST_BATCH_PLAN.md
-$issueFile = Join-Path $PSScriptRoot 'issue-data\issues_utf8.jsonl'
-$ledgerPath = Join-Path $PSScriptRoot 'TERMUX_APP_ISSUE_LEDGER.md'
-$batchPath = Join-Path $PSScriptRoot 'TERMUX_APP_FIRST_BATCH_PLAN.md'
+﻿# Generate TERMUX_APP_ISSUE_LEDGER.md and TERMUX_APP_FIRST_BATCH_PLAN.md
+$ErrorActionPreference = "Stop"
 
-# Initialize buckets
-$buckets = @{ A = @(); B = @(); C = @(); D = @(); E = @(); F = @(); G = @() }
+$issueFile = Join-Path $PSScriptRoot "issue-data\issues_utf8.jsonl"
+$ledgerPath = Join-Path $PSScriptRoot "TERMUX_APP_ISSUE_LEDGER.md"
+$batchPath = Join-Path $PSScriptRoot "TERMUX_APP_FIRST_BATCH_PLAN.md"
+
+if (!(Test-Path $issueFile)) {
+    throw "Missing issue file: $issueFile"
+}
+
+function To-LowerText($value) {
+    if ($null -eq $value) { return "" }
+    if ($value -is [array]) { return (($value -join ",").ToString()).ToLowerInvariant() }
+    return ($value.ToString()).ToLowerInvariant()
+}
+
+$buckets = [ordered]@{
+    A = New-Object System.Collections.Generic.List[string]
+    B = New-Object System.Collections.Generic.List[string]
+    C = New-Object System.Collections.Generic.List[string]
+    D = New-Object System.Collections.Generic.List[string]
+    E = New-Object System.Collections.Generic.List[string]
+    F = New-Object System.Collections.Generic.List[string]
+    G = New-Object System.Collections.Generic.List[string]
+}
 
 function Get-Bucket($issue) {
-    $title = if ($issue.title) { $issue.title } else { '' }
-    $title = $title.ToLower()
-    $body = if ($issue.body) { $issue.body } else { '' }
-    $body = $body.ToLower()
-    $labels = ($issue.labels -join ',').ToLower()
-    # Bucket A – high confidence bugs
-    if ($title -match 'crash' -or $labels -match 'bug') {
-        if ($body -match 'stack trace|exception|caused by|fatal error' -or $title -match 'crash') { return 'A' }
-        return 'A'
+    $title = To-LowerText $issue.title
+    $body = To-LowerText $issue.body
+    $labels = To-LowerText $issue.labels
+
+    # E: mirror/network/user environment first, because these are usually not app-code bugs.
+    if ($title -match "mirror|network|repo|repository|hash sum|pkg update|pkg upgrade|apt|tur-packages" -or
+        $body -match "hash sum mismatch|failed to fetch|mirror|tur-packages") {
+        return "E"
     }
-    # Bucket B – low risk fixes
-    if ($title -match 'typo|null|leak|resource|doc|documentation') { return 'B' }
-    if ($labels -match 'enhancement|documentation|question|lint') { return 'B' }
-    # Bucket C – needs runtime stack
-    if ($title -match 'session|install|bootstrap|runtime') { return 'C' }
-    if ($labels -match 'runtime|session|install|bootstrap') { return 'C' }
-    # Bucket D – belongs elsewhere
-    if ($title -match 'package|api|x11|widget|boot') { return 'D' }
-    if ($labels -match 'termux-packages|termux-api|widget|boot|x11') { return 'D' }
-    # Bucket E – mirror/network/env
-    if ($title -match 'mirror|network|repo|hash') { return 'E' }
-    if ($labels -match 'mirror|network|repo') { return 'E' }
-    # Bucket F – Android/device specific
-    if ($title -match 'android|oem|permission|device') { return 'F' }
-    if ($labels -match 'android|oem|permission|device') { return 'F' }
-    return 'G'
+
+    # D: belongs in another Termux repo/package.
+    if ($title -match "x11|widget|boot|termux-api|termux packages|package request|package update" -or
+        $labels -match "termux-packages|termux-api|x11|widget|boot") {
+        return "D"
+    }
+
+    # C: needs runtime stack / APK behavior.
+    if ($title -match "session|bootstrap|install|terminal|keyboard|input|keycode|pageup|pagedown|launcher|shell|runtime" -or
+        $body -match "steps to reproduce|device model|android os version") {
+        return "C"
+    }
+
+    # F: Android/OEM/permission-specific.
+    if ($title -match "android 1[0-9]|android|oem|permission|scoped storage|notification permission|device" -or
+        $labels -match "android|permission|device|oem") {
+        return "F"
+    }
+
+    # A: app-code bug with crash/exception signal.
+    if ($title -match "crash|exception|fatal|anr" -or
+        $body -match "stack trace|caused by|androidruntime|fatal exception|remoteexception|securityexception|nullpointerexception") {
+        return "A"
+    }
+
+    # B: low-risk static/code-health/docs.
+    if ($title -match "typo|null|leak|resource leak|documentation|docs|readme|deprecated|lint" -or
+        $body -match "static code analysis|resource leak|typo|documentation") {
+        return "B"
+    }
+
+    return "G"
 }
+
+$issues = New-Object System.Collections.Generic.List[object]
 
 Get-Content $issueFile -Encoding utf8 | ForEach-Object {
-    $issue = $_ | ConvertFrom-Json -ErrorAction SilentlyContinue
-    if (-not $issue) { return }
+    if ([string]::IsNullOrWhiteSpace($_)) { return }
+
+    try {
+        $issue = $_ | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        Write-Warning "Skipping invalid JSONL line"
+        return
+    }
+
+    if ($null -eq $issue.number) { return }
+
     $bucket = Get-Bucket $issue
-    $buckets[$bucket] += "#${($issue.number)}: $($issue.title)"
+    $line = "#{0}: {1}" -f $issue.number, $issue.title
+    $buckets[$bucket].Add($line)
+
+    $issues.Add([pscustomobject]@{
+        Number = $issue.number
+        Title = $issue.title
+        Bucket = $bucket
+        UpdatedAt = $issue.updated_at
+        Comments = $issue.comments
+    })
 }
 
-# Write ledger
-if (Test-Path $ledgerPath) { Remove-Item -Path $ledgerPath -Force }
-$ledgerContent = "# TERMUX_APP_ISSUE_LEDGER`n"
-foreach ($b in 'A','B','C','D','E','F','G') {
-    $ledgerContent += "## Bucket $b`n"
-    foreach ($line in $buckets[$b]) { $ledgerContent += "- $line`n" }
-    $ledgerContent += "`n"
-}
-$ledgerTmp = "$ledgerPath.tmp"
-$ledgerContent | Set-Content -Path $ledgerTmp -Encoding utf8 -Force
-Move-Item -Path $ledgerTmp -Destination $ledgerPath -Force
+$total = $issues.Count
 
-# Prepare first batch plan (up to 10 from A and B)
-if (Test-Path $batchPath) { Remove-Item -Path $batchPath -Force }
-$selected = @()
-foreach ($b in 'A','B') {
+$ledger = New-Object System.Collections.Generic.List[string]
+$ledger.Add("# TERMUX_APP_ISSUE_LEDGER")
+$ledger.Add("")
+$ledger.Add("Pulled upstream open issues: $total")
+$ledger.Add("")
+$ledger.Add("## Bucket Counts")
+$ledger.Add("")
+foreach ($b in $buckets.Keys) {
+    $ledger.Add("- Bucket ${b}: $($buckets[$b].Count)")
+}
+$ledger.Add("")
+
+foreach ($b in $buckets.Keys) {
+    $ledger.Add("## Bucket ${b}")
+    $ledger.Add("")
+    if ($buckets[$b].Count -eq 0) {
+        $ledger.Add("- None")
+    } else {
+        foreach ($entry in $buckets[$b]) {
+            $ledger.Add("- $entry")
+        }
+    }
+    $ledger.Add("")
+}
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+[System.IO.File]::WriteAllLines($ledgerPath, $ledger, $utf8NoBom)
+
+$selected = New-Object System.Collections.Generic.List[string]
+
+foreach ($b in @("A", "B")) {
     foreach ($line in $buckets[$b]) {
         if ($selected.Count -ge 10) { break }
-        $selected += "Bucket ${b}: $line"
+        $selected.Add("Bucket ${b}: $line")
     }
     if ($selected.Count -ge 10) { break }
 }
-"# TERMUX_APP_FIRST_BATCH_PLAN`n`n## Selected Issues (Buckets A & B)`n" | Set-Content -Path $batchPath -Encoding utf8
-$selected | ForEach-Object { "- $_`n" | Add-Content -Path $batchPath -Encoding utf8 }
-"`n### Rationale`nIssues chosen per lane priority: high‑confidence bugs first, then low‑risk clean‑ups, up to 10 items.`n" | Add-Content -Path $batchPath -Encoding utf8
+
+$batch = New-Object System.Collections.Generic.List[string]
+$batch.Add("# TERMUX_APP_FIRST_BATCH_PLAN")
+$batch.Add("")
+$batch.Add("## Selected Issues")
+$batch.Add("")
+if ($selected.Count -eq 0) {
+    $batch.Add("- None selected from buckets A/B")
+} else {
+    foreach ($entry in $selected) {
+        $batch.Add("- $entry")
+    }
+}
+$batch.Add("")
+$batch.Add("## Rationale")
+$batch.Add("")
+$batch.Add("First batch is limited to buckets A and B only: high-confidence app-code crashes and low-risk static/code-health fixes.")
+$batch.Add("")
+$batch.Add("Do not batch-fix these automatically. Pick one issue, inspect source, make the smallest patch, and use GitHub Actions as the gate.")
+
+[System.IO.File]::WriteAllLines($batchPath, $batch, $utf8NoBom)
 
 Write-Host "Ledger and batch plan generated."
+Write-Host "Total issues: $total"
+foreach ($b in $buckets.Keys) {
+    Write-Host "Bucket ${b}: $($buckets[$b].Count)"
+}
