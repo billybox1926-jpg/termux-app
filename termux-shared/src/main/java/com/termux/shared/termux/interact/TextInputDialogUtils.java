@@ -23,9 +23,11 @@ public final class TextInputDialogUtils {
                                  final DialogInterface.OnDismissListener onDismiss) {
         final EditText input = new EditText(activity);
         input.setSingleLine();
+        // Limit text length to prevent Selection.setSelection() crash with very long text (#4542)
+        input.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(4096)});
         if (initialText != null) {
             input.setText(initialText);
-            Selection.setSelection(input.getText(), initialText.length());
+            Selection.setSelection(input.getText(), input.getText().length());
         }
 
         final AlertDialog[] dialogHolder = new AlertDialog[1];
