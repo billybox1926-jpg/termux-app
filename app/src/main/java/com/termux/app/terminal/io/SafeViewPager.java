@@ -9,8 +9,9 @@ import androidx.viewpager.widget.ViewPager;
  * A safe wrapper around {@link ViewPager} that guards against IllegalArgumentException
  * caused by {@code MotionEvent} pointer index out of range errors on certain Android versions.
  *
- * <p>If {@link ViewPager#onInterceptTouchEvent(MotionEvent)} throws an
- * {@link IllegalArgumentException}, we catch it and return {@code false} to avoid the crash.
+ * <p>If {@link ViewPager#onInterceptTouchEvent(MotionEvent)} or
+ * {@link ViewPager#onTouchEvent(MotionEvent)} throws an {@link IllegalArgumentException},
+ * we catch it and return {@code false} to avoid the crash.
  * This mirrors the common workaround for the AndroidX bug (see issue #3478). </p>
  */
 public class SafeViewPager extends ViewPager {
@@ -27,9 +28,25 @@ public class SafeViewPager extends ViewPager {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            // Pointer index out of range – swallow the exception and prevent a crash.
-            // Returning false means the ViewPager will not intercept the touch event.
-            return false;
+            return ignoreBadPointerIndexTouchEvent();
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        try {
+            return super.onTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            return ignoreBadPointerIndexTouchEvent();
+        }
+    }
+
+    /**
+     * Pointer index out of range exceptions are caused by inconsistent multi-touch events
+     * passed to ViewPager on some Android builds. Return false so the gesture is ignored
+     * instead of crashing the app.
+     */
+    private boolean ignoreBadPointerIndexTouchEvent() {
+        return false;
     }
 }
