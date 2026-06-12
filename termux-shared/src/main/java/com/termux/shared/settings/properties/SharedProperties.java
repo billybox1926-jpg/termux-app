@@ -258,8 +258,8 @@ public class SharedProperties {
 
     /** Returns the first {@link File} found in
      * {@code propertiesFilePaths} from which app properties can be loaded. If the {@link File} found
-     * is not a regular file or is not readable, then {@code null} is returned. Symlinks **will not**
-     * be followed for potential security reasons.
+     * is not a regular file or is not readable, then {@code null} is returned. Symlinks will be
+     * followed so that properties files can be symlinks.
      *
      * @param propertiesFilePaths The {@link List<String>} containing properties file paths.
      * @param logTag If log tag to use for logging errors.
@@ -272,8 +272,8 @@ public class SharedProperties {
         for(String propertiesFilePath : propertiesFilePaths) {
             File propertiesFile = new File(propertiesFilePath);
 
-            // Symlinks **will not** be followed.
-            FileType fileType = FileUtils.getFileType(propertiesFilePath, false);
+            // Follow symlinks so that termux.properties can be a symlink. (#4157)
+            FileType fileType = FileUtils.getFileType(propertiesFilePath, true);
             if (fileType == FileType.REGULAR) {
                 if (propertiesFile.canRead())
                     return propertiesFile;

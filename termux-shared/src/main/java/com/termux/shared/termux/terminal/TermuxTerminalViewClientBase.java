@@ -77,6 +77,10 @@ public class TermuxTerminalViewClientBase implements TerminalViewClient {
         return false;
     }
 
+    @Override
+    public void setCapsLockAsCtrl(boolean down) {
+    }
+
 
 
     @Override

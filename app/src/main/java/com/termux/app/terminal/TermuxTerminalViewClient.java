@@ -62,6 +62,9 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
     /** Keeping track of the special keys acting as Ctrl and Fn for the soft keyboard and other hardware keys. */
     boolean mVirtualControlKeyDown, mVirtualFnKeyDown;
 
+    /** Keeping track of whether Caps Lock is being treated as Ctrl (physical keyboard remap). */
+    boolean mCapsLockAsCtrl;
+
     private Runnable mShowSoftKeyboardRunnable;
 
     private boolean mShowSoftKeyboardIgnoreOnce;
@@ -322,7 +325,12 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
 
     @Override
     public boolean readControlKey() {
-        return readExtraKeysSpecialButton(SpecialButton.CTRL) || mVirtualControlKeyDown;
+        return readExtraKeysSpecialButton(SpecialButton.CTRL) || mVirtualControlKeyDown || mCapsLockAsCtrl;
+    }
+
+    @Override
+    public void setCapsLockAsCtrl(boolean down) {
+        mCapsLockAsCtrl = down;
     }
 
     @Override

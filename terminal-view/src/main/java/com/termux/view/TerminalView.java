@@ -784,6 +784,18 @@ public final class TerminalView extends View {
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_LANGUAGE_SWITCH) {
             return super.onKeyDown(keyCode, event);
+        } else if (keyCode == KeyEvent.KEYCODE_ZENKAKU_HANKAKU ||
+                   keyCode == KeyEvent.KEYCODE_HENKAN ||
+                   keyCode == KeyEvent.KEYCODE_MUHENKAN ||
+                   keyCode == KeyEvent.KEYCODE_YEN ||
+                   keyCode == KeyEvent.KEYCODE_RO) {
+            return super.onKeyDown(keyCode, event);
+        } else if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
+            // Treat Caps Lock as Ctrl for physical keyboards where Caps Lock is
+            // remapped to Ctrl at the Android system level. Toggle virtual Ctrl state
+            // on key down and consume the event so it does not toggle Caps Lock LED.
+            mClient.setCapsLockAsCtrl(event.getAction() == KeyEvent.ACTION_DOWN);
+            return true;
         }
 
         final int metaState = event.getMetaState();
@@ -971,6 +983,10 @@ public final class TerminalView extends View {
             invalidate();
             return true;
         } else if (event.isSystem()) {
+            if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
+                // Reset the Caps Lock as Ctrl state on key up. (#4281)
+                mClient.setCapsLockAsCtrl(false);
+            }
             // Let system key events through.
             return super.onKeyUp(keyCode, event);
         }

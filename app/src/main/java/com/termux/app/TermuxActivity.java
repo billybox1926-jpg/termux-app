@@ -11,7 +11,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
@@ -860,8 +862,10 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
     public void termuxSessionListNotifyUpdated() {
         // Ensure adapter notification always runs on the UI thread to prevent
-        // IllegalStateException from ListView when modified from background. (#5027)
-        runOnUiThread(() -> mTermuxSessionListViewController.notifyDataSetChanged());
+        // IllegalStateException from ListView when modified from background. (#5027, #4706)
+        // Use postAtFrontOfQueue to ensure notifyDataSetChanged is processed before
+        // any pending layout passes that might see stale data.
+        new Handler(Looper.getMainLooper()).postAtFrontOfQueue(() -> mTermuxSessionListViewController.notifyDataSetChanged());
     }
 
     public boolean isVisible() {
