@@ -58,7 +58,28 @@ public class FileReceiverActivity extends AppCompatActivity {
         if (sharedText == null || sharedText.isEmpty()) return false;
 
         return Patterns.WEB_URL.matcher(sharedText).matches()
-            || Pattern.matches("magnet:\\?xt=urn:btih:.*?", sharedText);
+            || Pattern.matches("magnet:\\?xt=urn:btih:.*?", sharedText)
+            || isNonFileUrlScheme(sharedText);
+    }
+
+    /**
+     * Check if the shared text is a URL with a non-file URI scheme that should be opened
+     * with the url-opener script rather than saved as a file. (#3935)
+     */
+    static boolean isNonFileUrlScheme(String sharedText) {
+        try {
+            Uri uri = Uri.parse(sharedText);
+            String scheme = uri.getScheme();
+            if (scheme == null || scheme.isEmpty()) return false;
+            if (UriScheme.SCHEME_CONTENT.equalsIgnoreCase(scheme) || UriScheme.SCHEME_FILE.equalsIgnoreCase(scheme)) return false;
+            if (uri.getHost() != null && !uri.getHost().isEmpty()) return true;
+            return "mailto".equalsIgnoreCase(scheme) || "tel".equalsIgnoreCase(scheme)
+                || "irc".equalsIgnoreCase(scheme) || "ircs".equalsIgnoreCase(scheme)
+                || "gopher".equalsIgnoreCase(scheme) || "sftp".equalsIgnoreCase(scheme)
+                || "nfs".equalsIgnoreCase(scheme) || "smb".equalsIgnoreCase(scheme);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -79,7 +100,15 @@ public class FileReceiverActivity extends AppCompatActivity {
             final Uri sharedUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
             if (sharedUri != null) {
-                handleContentUri(sharedUri, sharedTitle);
+                String sharedScheme = sharedUri.getScheme();
+                if (sharedScheme != null
+                    && !UriScheme.SCHEME_CONTENT.equals(sharedScheme)
+                    && !UriScheme.SCHEME_FILE.equals(sharedScheme)
+                    && sharedUri.getHost() != null && !sharedUri.getHost().isEmpty()) {
+                    handleUrlAndFinish(sharedUri.toString());
+                } else {
+                    handleContentUri(sharedUri, sharedTitle);
+                }
             } else if (sharedText != null) {
                 if (isSharedTextAnUrl(sharedText)) {
                     handleUrlAndFinish(sharedText);
