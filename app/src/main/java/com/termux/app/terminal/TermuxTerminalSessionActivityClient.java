@@ -32,6 +32,7 @@ import com.termux.terminal.TerminalColors;
 import com.termux.terminal.TerminalSession;
 import com.termux.terminal.TerminalSessionClient;
 import com.termux.terminal.TextStyle;
+import com.termux.shared.view.KeyboardUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -196,6 +197,14 @@ public class TermuxTerminalSessionActivityClient extends TermuxTerminalSessionCl
         if (!mActivity.isVisible()) return;
 
         ShareUtils.copyTextToClipboard(mActivity, text);
+
+        // Re-show the keyboard after clipboard copy since some ROMs (e.g. Samsung)
+        // dismiss the keyboard when setPrimaryClip() is called. (#3884)
+        mActivity.getTerminalView().postDelayed(() -> {
+            if (mActivity.isVisible() && mActivity.getTerminalView().hasWindowFocus()) {
+                KeyboardUtils.showSoftKeyboard(mActivity, mActivity.getTerminalView());
+            }
+        }, 100);
     }
 
     @Override
