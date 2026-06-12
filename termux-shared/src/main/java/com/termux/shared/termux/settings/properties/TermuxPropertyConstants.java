@@ -155,6 +155,10 @@ public final class TermuxPropertyConstants {
     public static final String KEY_USE_CTRL_SPACE_WORKAROUND =  "ctrl-space-workaround"; // Default: "ctrl-space-workaround"
 
 
+    /** Defines the key for the custom path for the url-opener script */
+    public static final String KEY_URL_OPENER_PATH =  "url-opener-path"; // Default: "url-opener-path"
+
+
 
     /** Defines the key for whether to use fullscreen */
     public static final String KEY_USE_FULLSCREEN =  "fullscreen"; // Default: "fullscreen"
@@ -420,6 +424,7 @@ public final class TermuxPropertyConstants {
         KEY_RUN_TERMUX_AM_SOCKET_SERVER,
         KEY_TERMINAL_ONCLICK_URL_OPEN,
         KEY_USE_CTRL_SPACE_WORKAROUND,
+        KEY_URL_OPENER_PATH,
         KEY_USE_FULLSCREEN,
         KEY_USE_FULLSCREEN_WORKAROUND,
         TermuxConstants.PROP_ALLOW_EXTERNAL_APPS,
