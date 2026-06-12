@@ -20,6 +20,7 @@ import com.termux.shared.net.uri.UriUtils;
 import com.termux.shared.logger.Logger;
 import com.termux.shared.net.uri.UriScheme;
 import com.termux.shared.termux.TermuxConstants;
+import com.termux.shared.termux.TermuxConstants.TERMUX_APP.TERMUX_SERVICE;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -141,10 +142,10 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
         }
         try {
             scriptFile.setExecutable(true);
-            Intent executeIntent = new Intent(TermuxConstants.TERMUX_SERVICE.ACTION_SERVICE_EXECUTE,
+            Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE,
                 UriUtils.getFileUri(scriptPath));
             executeIntent.setClass(context, TermuxService.class);
-            executeIntent.putExtra(TermuxConstants.TERMUX_SERVICE.EXTRA_ARGUMENTS,
+            executeIntent.putExtra(TERMUX_SERVICE.EXTRA_ARGUMENTS,
                 new String[]{uri.toString()});
             context.startService(executeIntent);
         } catch (Exception e) {
