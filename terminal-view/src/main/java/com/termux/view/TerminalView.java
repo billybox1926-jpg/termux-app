@@ -967,28 +967,24 @@ public final class TerminalView extends View {
     public boolean handleKeyCodeAction(int keyCode, int keyMod) {
         boolean shiftDown = (keyMod & KeyHandler.KEYMOD_SHIFT) != 0;
         boolean ctrlDown = (keyMod & KeyHandler.KEYMOD_CTRL) != 0;
+        boolean altDown = (keyMod & KeyHandler.KEYMOD_ALT) != 0;
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_PAGE_UP:
             case KeyEvent.KEYCODE_PAGE_DOWN:
-                // shift+page_up and shift+page_down should scroll scrollback history instead of
-                // scrolling command history or changing pages
-                if (shiftDown) {
+                // Shift-only page keys keep Termux local scrollback behavior.
+                // Ctrl/Alt combinations must fall through to KeyHandler so the
+                // modifier is included in the terminal escape sequence.
+                if (shiftDown && !ctrlDown && !altDown) {
                     long time = SystemClock.uptimeMillis();
                     MotionEvent motionEvent = MotionEvent.obtain(time, time, MotionEvent.ACTION_DOWN, 0, 0, 0);
                     doScroll(motionEvent, keyCode == KeyEvent.KEYCODE_PAGE_UP ? -mEmulator.mRows : mEmulator.mRows);
                     motionEvent.recycle();
                     return true;
                 }
-                // When Ctrl is pressed (without shift), do not consume the event here.
-                // Let it fall through to KeyHandler.getCode() so the Ctrl modifier
-                // is included in the escape sequence (e.g. \033[5;5~ for Ctrl+PgUp).
-                if (ctrlDown) {
-                    return false;
-                }
         }
 
-       return false;
+        return false;
     }
 
     /**
