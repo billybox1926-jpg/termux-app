@@ -221,8 +221,11 @@ public class FileReceiverActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         final File editorProgramFile = new File(EDITOR_PROGRAM);
                         if (!editorProgramFile.isFile()) {
-                            showErrorDialogAndQuit("The following file does not exist:\n$HOME/bin/termux-file-editor\n\n"
-                                + "Create this file as a script or a symlink - it will be called with the received file as only argument.");
+                            // No termux-file-editor script found - just save the file to
+                            // downloads and inform the user instead of failing. (#4957)
+                            showErrorDialogAndQuit("File saved to " + outFile.getAbsolutePath()
+                                + "\n\nNo termux-file-editor script found at $HOME/bin/termux-file-editor."
+                                + "\nCreate this file as a script or a symlink to enable in-app editing.");
                             return;
                         }
                         // Do this for the user if necessary:

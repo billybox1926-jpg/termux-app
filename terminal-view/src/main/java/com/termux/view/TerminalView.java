@@ -660,10 +660,8 @@ public final class TerminalView extends View {
                         return onKeyUp(keyCode, event);
                 }
             }
-        } else if (mClient.shouldUseCtrlSpaceWorkaround() &&
-                   keyCode == KeyEvent.KEYCODE_SPACE && event.isCtrlPressed()) {
-            /* ctrl+space does not work on some ROMs without this workaround.
-               However, this breaks it on devices where it works out of the box. */
+        } else if (keyCode == KeyEvent.KEYCODE_SPACE && event.isCtrlPressed()) {
+            // Ctrl+Space should send Ctrl-@ (NUL) in the terminal. (#3896)
             return onKeyDown(keyCode, event);
         }
         return super.onKeyPreIme(keyCode, event);
