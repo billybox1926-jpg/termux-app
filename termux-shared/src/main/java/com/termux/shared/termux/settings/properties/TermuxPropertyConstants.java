@@ -158,6 +158,9 @@ public final class TermuxPropertyConstants {
     /** Defines the key for the custom path for the url-opener script */
     public static final String KEY_URL_OPENER_PATH =  "url-opener-path"; // Default: "url-opener-path"
 
+    /** Defines the key for whether to run url-opener in background (app-shell) instead of foreground (terminal session) */
+    public static final String KEY_URL_OPENER_BACKGROUND =  "url-opener-background"; // Default: "url-opener-background"
+
 
 
     /** Defines the key for whether to use fullscreen */
@@ -425,6 +428,7 @@ public final class TermuxPropertyConstants {
         KEY_TERMINAL_ONCLICK_URL_OPEN,
         KEY_USE_CTRL_SPACE_WORKAROUND,
         KEY_URL_OPENER_PATH,
+        KEY_URL_OPENER_BACKGROUND,
         KEY_USE_FULLSCREEN,
         KEY_USE_FULLSCREEN_WORKAROUND,
         TermuxConstants.PROP_ALLOW_EXTERNAL_APPS,

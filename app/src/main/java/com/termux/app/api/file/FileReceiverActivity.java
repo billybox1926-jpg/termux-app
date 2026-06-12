@@ -23,6 +23,7 @@ import com.termux.shared.termux.TermuxConstants.TERMUX_APP;
 import com.termux.shared.termux.TermuxConstants.TERMUX_APP.TERMUX_SERVICE;
 import com.termux.app.TermuxService;
 import com.termux.shared.logger.Logger;
+import com.termux.shared.shell.command.ExecutionCommand;
 import com.termux.shared.termux.settings.properties.TermuxAppSharedProperties;
 import com.termux.shared.termux.settings.properties.TermuxPropertyConstants;
 
@@ -105,13 +106,14 @@ public class FileReceiverActivity extends AppCompatActivity {
                     && !UriScheme.SCHEME_CONTENT.equals(sharedScheme)
                     && !UriScheme.SCHEME_FILE.equals(sharedScheme)
                     && sharedUri.getHost() != null && !sharedUri.getHost().isEmpty()) {
-                    handleUrlAndFinish(sharedUri.toString());
+                    handleUrlAndFinish(sharedUri.toString(), sharedTitle);
                 } else {
                     handleContentUri(sharedUri, sharedTitle);
                 }
             } else if (sharedText != null) {
                 if (isSharedTextAnUrl(sharedText)) {
-                    handleUrlAndFinish(sharedText);
+                    String subject = IntentUtils.getStringExtraIfSet(intent, Intent.EXTRA_SUBJECT, null);
+                    handleUrlAndFinish(sharedText, subject != null ? subject : sharedTitle);
                 } else {
                     String subject = IntentUtils.getStringExtraIfSet(intent, Intent.EXTRA_SUBJECT, null);
                     if (subject == null) subject = sharedTitle;
@@ -295,11 +297,15 @@ public class FileReceiverActivity extends AppCompatActivity {
     }
 
     void handleUrlAndFinish(final String url) {
+        handleUrlAndFinish(url, null);
+    }
+
+    void handleUrlAndFinish(final String url, final String title) {
         String urlOpenerPath = TermuxAppSharedProperties.getProperties().getUrlOpenerPath();
         final File urlOpenerProgramFile = new File(urlOpenerPath);
         if (!urlOpenerProgramFile.isFile()) {
             showErrorDialogAndQuit("The following file does not exist:\\n" + urlOpenerPath + "\\n\\n"
-                + "Create this file as a script or a symlink - it will be called with the shared URL as the first argument.\n"
+                + "Create this file as a script or a symlink - it will be called with the shared URL as the first argument.\\n"
                 + "Change with url-opener-path property in ~/.termux/termux.properties.");
             return;
         }
@@ -312,7 +318,19 @@ public class FileReceiverActivity extends AppCompatActivity {
 
         Intent executeIntent = new Intent(TERMUX_SERVICE.ACTION_SERVICE_EXECUTE, urlOpenerProgramUri);
         executeIntent.setClass(FileReceiverActivity.this, TermuxService.class);
-        executeIntent.putExtra(TERMUX_SERVICE.EXTRA_ARGUMENTS, new String[]{url});
+
+        // Pass URI as argv[0] and optional title/subject as argv[1]
+        String[] arguments = title != null && !title.isEmpty()
+            ? new String[]{url, title}
+            : new String[]{url};
+        executeIntent.putExtra(TERMUX_SERVICE.EXTRA_ARGUMENTS, arguments);
+
+        // Opt-in background execution via app-shell instead of terminal session (#254)
+        if (TermuxAppSharedProperties.getProperties().isUrlOpenerBackground()) {
+            executeIntent.putExtra(TERMUX_SERVICE.EXTRA_BACKGROUND, true);
+            executeIntent.putExtra(TERMUX_SERVICE.EXTRA_RUNNER, ExecutionCommand.Runner.APP_SHELL.getName());
+        }
+
         startService(executeIntent);
         finish();
     }
