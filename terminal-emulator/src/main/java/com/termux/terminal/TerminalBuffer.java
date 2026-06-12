@@ -101,9 +101,6 @@ public final class TerminalBuffer {
             boolean lineFillsWidth = lastPrintingCharIndex == x2Index - 1;
             if ((!joinBackLines || !rowLineWrap) && (!joinFullLines || !lineFillsWidth)
                 && row < selY2 && row < mScreenRows - 1) builder.append('\n');
-            // Always add newline between rows when selection spans multiple rows. (#3474)
-            if (row < selY2 && row < mScreenRows - 1 && builder.length() > 0
-                && builder.charAt(builder.length() - 1) != '\n') builder.append('\n');
         }
         return builder.toString();
     }
