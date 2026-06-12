@@ -1610,6 +1610,16 @@ public final class TerminalEmulator {
                 mAboutToAutoWrap = false;
                 break;
             case 'K': // "CSI{n}K" - Erase in line (EL).
+                mAboutToAutoWrap = false;
+                // If cursor is at end of line due to auto-wrap, clear the next row. (#3549)
+                if (mCursorCol >= mColumns) {
+                    mCursorCol = 0;
+                    mCursorRow++;
+                    if (mCursorRow >= mBottomMargin) {
+                        mCursorRow = mBottomMargin - 1;
+                        scrollDownOneLine();
+                    }
+                }
                 switch (getArg0(0)) {
                     case 0: // Erase from the cursor to the end of the line, inclusive (default)
                         blockClear(mCursorCol, mCursorRow, mColumns - mCursorCol);
@@ -1624,7 +1634,6 @@ public final class TerminalEmulator {
                         unknownSequence(b);
                         return;
                 }
-                mAboutToAutoWrap = false;
                 break;
             case 'L': // "${CSI}{N}L" - insert ${N} lines (IL).
             {
