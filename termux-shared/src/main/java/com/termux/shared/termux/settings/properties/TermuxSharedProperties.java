@@ -618,6 +618,10 @@ public abstract class TermuxSharedProperties {
         return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_USE_CTRL_SPACE_WORKAROUND, true);
     }
 
+    public String getUrlOpenerPath() {
+        return (String) getInternalPropertyValue(TermuxPropertyConstants.KEY_URL_OPENER_PATH, TermuxConstants.TERMUX_HOME_DIR_PATH + "/bin/termux-url-opener");
+    }
+
     public boolean isUsingFullScreen() {
         return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_USE_FULLSCREEN, true);
     }
