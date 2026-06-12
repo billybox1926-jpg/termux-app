@@ -15,6 +15,7 @@ import com.termux.shared.logger.Logger;
 import com.termux.shared.markdown.MarkdownUtils;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -160,9 +161,37 @@ public class AndroidUtils {
         appendPropertyToMarkdown(markdownString, "DEVICE", Build.DEVICE);
         appendPropertyToMarkdown(markdownString, "SUPPORTED_ABIS", Joiner.on(", ").skipNulls().join(Build.SUPPORTED_ABIS));
 
+        // CPU information
+        String cpuInfo = getCpuInfo();
+        if (cpuInfo != null && !cpuInfo.isEmpty())
+            appendPropertyToMarkdown(markdownString, "CPU_INFO", cpuInfo);
+
         markdownString.append("\n##\n");
 
         return markdownString.toString();
+    }
+
+
+
+    /**
+     * Get CPU information by reading /proc/cpuinfo.
+     *
+     * @return Returns the CPU info string, or {@code null} if failed.
+     */
+    public static String getCpuInfo() {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream("/proc/cpuinfo")))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            int count = 0;
+            while ((line = reader.readLine()) != null && count < 20) {
+                sb.append(line).append("\n");
+                count++;
+            }
+            return sb.toString().trim();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

@@ -181,6 +181,21 @@
             android:name=".app.TermuxOpenReceiver"
             android:exported="false" />
 
+        <activity
+            android:name=".app.TermuxSchemeOpenerActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:targetApi="n">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="termux" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".app.event.SystemEventReceiver"
             android:exported="false">

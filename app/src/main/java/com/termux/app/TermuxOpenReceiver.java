@@ -56,6 +56,10 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
         }
 
         String scheme = data.getScheme();
+        if (scheme != null && "termux".equalsIgnoreCase(scheme)) {
+            handleTermuxScheme(context, data);
+            return;
+        }
         if (scheme != null && !UriScheme.SCHEME_FILE.equals(scheme)) {
             Intent urlIntent = new Intent(intentAction, data);
             if (intentAction.equals(Intent.ACTION_SEND)) {
@@ -81,8 +85,8 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
         }
 
         final File fileToShare = new File(filePath);
-        if (!(fileToShare.isFile() && fileToShare.canRead())) {
-            Logger.logError(LOG_TAG, "Not a readable file: '" + fileToShare.getAbsolutePath() + "'");
+        if (!fileToShare.isFile()) {
+            Logger.logError(LOG_TAG, "Not a file: '" + fileToShare.getAbsolutePath() + "'");
             return;
         }
 
@@ -125,6 +129,26 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
             context.startActivity(sendIntent);
         } catch (ActivityNotFoundException e) {
             Logger.logError(LOG_TAG, "No app handles the url " + data);
+        }
+    }
+
+    private void handleTermuxScheme(Context context, Uri uri) {
+        final String scriptPath = TermuxConstants.TERMUX_HOME_DIR_PATH + "/bin/termux-scheme-opener";
+        final File scriptFile = new File(scriptPath);
+        if (!scriptFile.isFile()) {
+            Logger.logWarn(LOG_TAG, "termux: scheme received but script not found: " + scriptPath);
+            return;
+        }
+        try {
+            scriptFile.setExecutable(true);
+            Intent executeIntent = new Intent(TermuxConstants.TERMUX_SERVICE.ACTION_SERVICE_EXECUTE,
+                UriUtils.getFileUri(scriptPath));
+            executeIntent.setClass(context, TermuxService.class);
+            executeIntent.putExtra(TermuxConstants.TERMUX_SERVICE.EXTRA_ARGUMENTS,
+                new String[]{uri.toString()});
+            context.startService(executeIntent);
+        } catch (Exception e) {
+            Logger.logError(LOG_TAG, "Failed to run termux-scheme-opener for " + uri, e);
         }
     }
 
