@@ -171,24 +171,25 @@ public class FileReceiverActivity extends AppCompatActivity {
         try {
             Logger.logVerbose(LOG_TAG, "uri: \"" + uri + "\", path: \"" + uri.getPath() + "\", fragment: \"" + uri.getFragment() + "\"");
 
-            String attachmentFileName = null;
-
-            String[] projection = new String[]{OpenableColumns.DISPLAY_NAME};
-            try (Cursor c = getContentResolver().query(uri, projection, null, null, null)) {
-                if (c != null && c.moveToFirst()) {
-                    final int fileNameColumnId = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    if (fileNameColumnId >= 0) attachmentFileName = c.getString(fileNameColumnId);
-                }
-            }
-
-            if (attachmentFileName == null) attachmentFileName = subjectFromIntent;
-            if (attachmentFileName == null) attachmentFileName = UriUtils.getUriFileBasename(uri, true);
-
-            final String finalAttachmentFileName = attachmentFileName;
-
-            // Offload potentially blocking I/O to a background thread
+            // Offload all potentially blocking I/O to a background thread,
+            // including ContentResolver.query() and openInputStream(). (#5093)
             new Thread(() -> {
                 try {
+                    String attachmentFileName = null;
+
+                    String[] projection = new String[]{OpenableColumns.DISPLAY_NAME};
+                    try (Cursor c = getContentResolver().query(uri, projection, null, null, null)) {
+                        if (c != null && c.moveToFirst()) {
+                            final int fileNameColumnId = c.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                            if (fileNameColumnId >= 0) attachmentFileName = c.getString(fileNameColumnId);
+                        }
+                    }
+
+                    if (attachmentFileName == null) attachmentFileName = subjectFromIntent;
+                    if (attachmentFileName == null) attachmentFileName = UriUtils.getUriFileBasename(uri, true);
+
+                    final String finalAttachmentFileName = attachmentFileName;
+
                     InputStream in = getContentResolver().openInputStream(uri);
                     // Switch back to UI thread for dialog interaction
                     runOnUiThread(() -> promptNameAndSave(in, finalAttachmentFileName));
