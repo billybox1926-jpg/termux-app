@@ -9,12 +9,14 @@ This is a cross-platform replacement for the legacy shell helpers:
 - generate-tv-banner.sh
 - copy-to-other-apps.sh
 
-Required dependencies:
+Required runtime dependencies for image generation:
     python -m pip install cairosvg pillow
 
 Optional optimization:
     Install an oxipng Python package or make the oxipng CLI available on PATH.
     If neither is available, Pillow's built-in PNG optimizer is used.
+
+Commands like --help do not require image-generation dependencies.
 """
 from __future__ import annotations
 
@@ -25,22 +27,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Optional
-
-try:
-    import cairosvg
-    from PIL import Image
-except ImportError as exc:
-    sys.exit(
-        f"Missing dependency: {exc}.\n"
-        "Install required dependencies with:\n"
-        "  python -m pip install cairosvg pillow"
-    )
-
-try:
-    import oxipng as oxipng_module  # type: ignore[import-not-found]
-except ImportError:
-    oxipng_module = None
+from typing import Any, Iterable, Optional
 
 
 @dataclass(frozen=True)
@@ -79,8 +66,32 @@ def require_dir(path: Path, label: str = "directory") -> Path:
     return path
 
 
-def load_png_from_bytes(png_bytes: bytes) -> Image.Image:
+def load_image_dependencies() -> tuple[Any, Any]:
+    """Load CairoSVG and Pillow only when image generation is requested."""
+    try:
+        import cairosvg
+        from PIL import Image
+    except ImportError as exc:
+        raise RuntimeError(
+            f"Missing image-generation dependency: {exc}.\n"
+            "Install required dependencies with:\n"
+            "  python -m pip install cairosvg pillow"
+        ) from exc
+
+    return cairosvg, Image
+
+
+def load_optional_oxipng() -> Any:
+    try:
+        import oxipng
+    except ImportError:
+        return None
+    return oxipng
+
+
+def load_png_from_bytes(png_bytes: bytes) -> Any:
     """Load image eagerly so it does not keep a closed BytesIO handle."""
+    _, Image = load_image_dependencies()
     with io.BytesIO(png_bytes) as buffer:
         image = Image.open(buffer)
         image.load()
@@ -92,7 +103,7 @@ def render_svg_file(
     width: int,
     height: int,
     background_color: Optional[str] = None,
-) -> Image.Image:
+) -> Any:
     svg_path = require_file(svg_path, "SVG source")
     return render_svg_bytes(svg_path.read_bytes(), width, height, background_color)
 
@@ -102,7 +113,7 @@ def render_svg_text(
     width: int,
     height: int,
     background_color: Optional[str] = None,
-) -> Image.Image:
+) -> Any:
     return render_svg_bytes(svg_text.encode("utf-8"), width, height, background_color)
 
 
@@ -111,7 +122,8 @@ def render_svg_bytes(
     width: int,
     height: int,
     background_color: Optional[str] = None,
-) -> Image.Image:
+) -> Any:
+    cairosvg, _ = load_image_dependencies()
     png_bytes = cairosvg.svg2png(
         bytestring=svg_bytes,
         output_width=width,
@@ -121,7 +133,7 @@ def render_svg_bytes(
     return load_png_from_bytes(png_bytes)
 
 
-def save_png(image: Image.Image, png_path: Path, optimize: bool = False) -> None:
+def save_png(image: Any, png_path: Path, optimize: bool = False) -> None:
     png_path = png_path.expanduser()
     png_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(png_path, "PNG")
@@ -133,9 +145,10 @@ def optimize_png(png_path: Path, level: int = 4) -> None:
     """Losslessly optimize a PNG, preferring oxipng and falling back to Pillow."""
     png_path = require_file(png_path, "PNG output")
 
+    oxipng_module = load_optional_oxipng()
     if oxipng_module is not None and hasattr(oxipng_module, "optimize"):
         try:
-            oxipng_module.optimize(str(png_path), level=level)  # type: ignore[attr-defined]
+            oxipng_module.optimize(str(png_path), level=level)
             return
         except Exception as exc:  # pragma: no cover - optional dependency variance
             print(f"warning: oxipng module failed ({exc}); falling back", file=sys.stderr)
@@ -152,6 +165,7 @@ def optimize_png(png_path: Path, level: int = 4) -> None:
         except subprocess.CalledProcessError as exc:
             print(f"warning: oxipng CLI failed ({exc}); falling back", file=sys.stderr)
 
+    _, Image = load_image_dependencies()
     with Image.open(png_path) as image:
         image.save(png_path, "PNG", optimize=True)
 
