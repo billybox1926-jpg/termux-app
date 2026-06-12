@@ -151,7 +151,7 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
                 new String[]{uri.toString()});
             context.startService(executeIntent);
         } catch (Exception e) {
-            Logger.logError(LOG_TAG, "Failed to run termux-scheme-opener for " + uri, e);
+            Logger.logError(LOG_TAG, "Failed to run termux-scheme-opener for " + uri + ": " + e);
         }
     }
 
