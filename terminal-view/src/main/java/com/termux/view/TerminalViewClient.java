@@ -52,6 +52,8 @@ public interface TerminalViewClient {
 
     boolean readControlKey();
 
+    void setCapsLockAsCtrl(boolean down);
+
     boolean readAltKey();
 
     boolean readShiftKey();
