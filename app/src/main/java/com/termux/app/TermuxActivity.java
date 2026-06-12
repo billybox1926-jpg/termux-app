@@ -830,6 +830,23 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         return mExtraKeysView;
     }
 
+    /** Whether the terminal toolbar is enabled by user preference. */
+    public boolean isTerminalToolbarEnabled() {
+        return mPreferences.shouldShowTerminalToolbar();
+    }
+
+    /**
+     * Show or hide the extra keys row based on keyboard visibility.
+     * Called by TermuxActivityRootView when it detects keyboard state changes.
+     * Only applies when the user has the terminal toolbar enabled.
+     */
+    public void setExtraKeysVisibilityForKeyboard(boolean keyboardVisible) {
+        final ViewPager toolbarViewPager = getTerminalToolbarViewPager();
+        if (toolbarViewPager == null) return;
+        if (!mPreferences.shouldShowTerminalToolbar()) return;
+        toolbarViewPager.setVisibility(keyboardVisible ? View.VISIBLE : View.GONE);
+    }
+
     public TermuxTerminalExtraKeys getTermuxTerminalExtraKeys() {
         return mTermuxTerminalExtraKeys;
     }
