@@ -445,6 +445,9 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
     private void reloadProperties() {
         mProperties.loadTermuxPropertiesFromDisk();
 
+        // Re-apply theme since night mode may have changed. (#4523)
+        setActivityTheme();
+
         if (mTermuxTerminalViewClient != null)
             mTermuxTerminalViewClient.onReloadProperties();
     }
