@@ -171,7 +171,8 @@ public class KeyHandlerTest extends TestCase {
 		assertKeysEquals("\033[18;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F7, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[19;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F8, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[20;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F9, KeyHandler.KEYMOD_SHIFT, false, false));
-		assertKeysEquals("\033[23~", KeyHandler.getCode(KeyEvent.KEYCODE_F11, KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[21;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F10, KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[23;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F11, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[24;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F12, KeyHandler.KEYMOD_SHIFT, false, false));
 
 		assertKeysEquals("0", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_0, KeyHandler.KEYMOD_NUM_LOCK, false, false));
