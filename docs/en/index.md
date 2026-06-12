@@ -64,3 +64,7 @@ Long-hold the terminal → **More** → **Report Issue** to generate a debug rep
 - [XTerm control sequences](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 - [vt100.net](https://vt100.net/)
 - [Terminal codes (ANSI/terminfo)](https://wiki.bash-hackers.org/scripting/terminalcodes)
+
+## Architecture
+
+- [Intent & Execution Architecture](execution-architecture.md) — how Termux receives intents, routes them through the trampoline pattern, and executes commands securely
