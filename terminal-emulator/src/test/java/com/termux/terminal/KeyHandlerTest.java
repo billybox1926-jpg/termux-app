@@ -141,6 +141,20 @@ public class KeyHandlerTest extends TestCase {
 		assertKeysEquals("\033[1;6C", KeyHandler.getCode(KeyEvent.KEYCODE_DPAD_RIGHT, mod, false, false));
 		assertKeysEquals("\033[1;6D", KeyHandler.getCode(KeyEvent.KEYCODE_DPAD_LEFT, mod, false, false));
 
+		// Page up/down keys:
+		assertKeysEquals("\033[5~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, 0, false, false));
+		assertKeysEquals("\033[6~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, 0, false, false));
+		assertKeysEquals("\033[5;2~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[6;2~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[5;3~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, KeyHandler.KEYMOD_ALT, false, false));
+		assertKeysEquals("\033[6;3~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, KeyHandler.KEYMOD_ALT, false, false));
+		assertKeysEquals("\033[5;5~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, KeyHandler.KEYMOD_CTRL, false, false));
+		assertKeysEquals("\033[6;5~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, KeyHandler.KEYMOD_CTRL, false, false));
+		assertKeysEquals("\033[5;6~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, KeyHandler.KEYMOD_CTRL | KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[6;6~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, KeyHandler.KEYMOD_CTRL | KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[5;4~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_UP, KeyHandler.KEYMOD_ALT | KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[6;4~", KeyHandler.getCode(KeyEvent.KEYCODE_PAGE_DOWN, KeyHandler.KEYMOD_ALT | KeyHandler.KEYMOD_SHIFT, false, false));
+
 		// Home/end keys:
 		assertKeysEquals("\033[H", KeyHandler.getCode(KeyEvent.KEYCODE_MOVE_HOME, 0, false, false));
 		assertKeysEquals("\033[F", KeyHandler.getCode(KeyEvent.KEYCODE_MOVE_END, 0, false, false));
