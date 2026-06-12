@@ -180,7 +180,21 @@ public final class TerminalView extends View {
                     distanceY += mScrollRemainder;
                     int deltaRows = (int) (distanceY / mRenderer.mFontLineSpacing);
                     mScrollRemainder = distanceY - deltaRows * mRenderer.mFontLineSpacing;
-                    doScroll(e, deltaRows);
+                    // Issue #101: In alternate buffer mode (e.g. less, vim), send PageUp/PageDown
+                    // key events instead of scrolling the terminal buffer, so that full-screen
+                    // apps can handle the scroll gestures.
+                    if (mEmulator.isAlternateBufferActive() && !e.isFromSource(InputDevice.SOURCE_MOUSE)) {
+                        while (deltaRows < 0) {
+                            handleKeyCode(KeyEvent.KEYCODE_PAGE_UP, 0);
+                            deltaRows++;
+                        }
+                        while (deltaRows > 0) {
+                            handleKeyCode(KeyEvent.KEYCODE_PAGE_DOWN, 0);
+                            deltaRows--;
+                        }
+                    } else {
+                        doScroll(e, deltaRows);
+                    }
                 }
                 return true;
             }
@@ -220,7 +234,17 @@ public final class TerminalView extends View {
                         boolean more = mScroller.computeScrollOffset();
                         int newY = mScroller.getCurrY();
                         int diff = mouseTrackingAtStartOfFling ? (newY - mLastY) : (newY - mTopRow);
-                        doScroll(e2, diff);
+                        // Issue #101: In alternate buffer, send PageUp/PageDown instead of scrolling.
+                        if (mEmulator.isAlternateBufferActive()) {
+                            int rows = Math.abs(diff);
+                            int keyCode = (diff < 0) ? KeyEvent.KEYCODE_PAGE_UP : KeyEvent.KEYCODE_PAGE_DOWN;
+                            for (int i = 0; i < rows; i++) {
+                                handleKeyCode(keyCode, 0);
+                            }
+                        } else {
+                            doScroll(e2, diff);
+                        }
+                        if (!mouseTrackingAtStartOfFling) mTopRow = newY;
                         mLastY = newY;
                         if (more) post(this);
                     }
