@@ -930,6 +930,12 @@ public final class TerminalView extends View {
         TerminalEmulator term = mTermSession.getEmulator();
         String code = KeyHandler.getCode(keyCode, keyMod, term.isCursorKeysApplicationMode(), term.isKeypadApplicationMode());
         if (code == null) return false;
+
+        // If backspace behaviour is set to BS and this is a plain DEL (no Alt modifier), replace with BS.
+        if (keyCode == KeyEvent.KEYCODE_DEL && mClient.shouldBackspaceSendBS() && (keyMod & KeyHandler.KEYMOD_ALT) == 0) {
+            code = code.replace('\u007F', '\u0008');
+        }
+
         mTermSession.write(code);
         return true;
     }

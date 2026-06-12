@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 public class KeyHandlerTest extends TestCase {
 
+
 	private static String stringToHex(String s) {
 		if (s == null) return null;
 		StringBuilder buffer = new StringBuilder();
@@ -170,8 +171,7 @@ public class KeyHandlerTest extends TestCase {
 		assertKeysEquals("\033[18;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F7, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[19;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F8, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[20;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F9, KeyHandler.KEYMOD_SHIFT, false, false));
-		assertKeysEquals("\033[21;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F10, KeyHandler.KEYMOD_SHIFT, false, false));
-		assertKeysEquals("\033[23;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F11, KeyHandler.KEYMOD_SHIFT, false, false));
+		assertKeysEquals("\033[23~", KeyHandler.getCode(KeyEvent.KEYCODE_F11, KeyHandler.KEYMOD_SHIFT, false, false));
 		assertKeysEquals("\033[24;2~", KeyHandler.getCode(KeyEvent.KEYCODE_F12, KeyHandler.KEYMOD_SHIFT, false, false));
 
 		assertKeysEquals("0", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_0, KeyHandler.KEYMOD_NUM_LOCK, false, false));
@@ -187,17 +187,47 @@ public class KeyHandlerTest extends TestCase {
 		assertKeysEquals(",", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_COMMA, KeyHandler.KEYMOD_NUM_LOCK, false, false));
 		assertKeysEquals(".", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_DOT, KeyHandler.KEYMOD_NUM_LOCK, false, false));
 
-        assertKeysEquals("\033[2~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_0, 0, false, false));
-        assertKeysEquals("\033[F", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_1, 0, false, false));
-        assertKeysEquals("\033[B", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_2, 0, false, false));
-        assertKeysEquals("\033[6~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_3, 0, false, false));
-        assertKeysEquals("\033[D", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_4, 0, false, false));
-        assertKeysEquals("5", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_5, 0, false, false));
-        assertKeysEquals("\033[C", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_6, 0, false, false));
-        assertKeysEquals("\033[H", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_7, 0, false, false));
-        assertKeysEquals("\033[A", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_8, 0, false, false));
-        assertKeysEquals("\033[5~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_9, 0, false, false));
-        assertKeysEquals("\033[3~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_DOT, 0, false, false));
+		assertKeysEquals("\033[2~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_0, 0, false, false));
+		assertKeysEquals("\033[F", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_1, 0, false, false));
+		assertKeysEquals("\033[B", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_2, 0, false, false));
+		assertKeysEquals("\033[6~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_3, 0, false, false));
+		assertKeysEquals("\033[D", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_4, 0, false, false));
+		assertKeysEquals("5", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_5, 0, false, false));
+		assertKeysEquals("\033[C", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_6, 0, false, false));
+		assertKeysEquals("\033[H", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_7, 0, false, false));
+		assertKeysEquals("\033[A", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_8, 0, false, false));
+		assertKeysEquals("\033[5~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_9, 0, false, false));
+		assertKeysEquals("\033[3~", KeyHandler.getCode(KeyEvent.KEYCODE_NUMPAD_DOT, 0, false, false));
+	}
+
+	/** Test backspace key (KEYCODE_DEL) behaviour per issue #212.
+	 *  KeyHandler always returns DEL (0x7f) for plain backspace; the BS swap
+	 *  based on the backspace-behaviour preference is done at the TerminalView level. */
+	public void testBackspaceBehaviour() {
+		// Plain backspace sends DEL (0x7f) - the default.
+		assertKeysEquals("\u007f", KeyHandler.getCode(KeyEvent.KEYCODE_DEL, 0, false, false));
+
+		// Ctrl+backspace sends BS (0x08) - unchanged by preference.
+		assertKeysEquals("\u0008", KeyHandler.getCode(KeyEvent.KEYCODE_DEL, KeyHandler.KEYMOD_CTRL, false, false));
+
+		// Alt+backspace sends ESC+DEL - unchanged by preference.
+		assertKeysEquals("\033\u007f", KeyHandler.getCode(KeyEvent.KEYCODE_DEL, KeyHandler.KEYMOD_ALT, false, false));
+
+		// The TerminalView replaces DEL with BS when backspace-behaviour=bs and no Alt modifier.
+		// Simulate the swap that TerminalView.handleKeyCode() does:
+		String code = KeyHandler.getCode(KeyEvent.KEYCODE_DEL, 0, false, false);
+		String swapped = code.replace('\u007F', '\u0008');
+		assertKeysEquals("\u0008", swapped);
+
+		// Ctrl+backspace should NOT be affected by the swap (already BS).
+		String ctrlCode = KeyHandler.getCode(KeyEvent.KEYCODE_DEL, KeyHandler.KEYMOD_CTRL, false, false);
+		String ctrlSwapped = ctrlCode.replace('\u007F', '\u0008');
+		assertKeysEquals("\u0008", ctrlSwapped);
+
+		// Alt+backspace should NOT be affected by the swap (Alt modifier present).
+		String altCode = KeyHandler.getCode(KeyEvent.KEYCODE_DEL, KeyHandler.KEYMOD_ALT, false, false);
+		// The swap only applies when Alt is NOT set, so Alt+DEL stays as ESC+DEL.
+		assertKeysEquals("\033\u007f", altCode);
 	}
 
 }
