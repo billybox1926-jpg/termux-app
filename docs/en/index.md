@@ -68,3 +68,14 @@ Long-hold the terminal → **More** → **Report Issue** to generate a debug rep
 ## Architecture
 
 - [Intent & Execution Architecture](execution-architecture.md) — how Termux receives intents, routes them through the trampoline pattern, and executes commands securely
+- [Module Architecture](architecture.md) — module layout, dependency graph, and folder responsibilities
+
+## Development
+
+- [Developer Setup](developer_setup.md) — onboarding guide for new contributors
+- [Developer Experience](devex.md) — build commands, validation, coding standards, PR hygiene
+
+## Repository
+
+- [Repository Setup](repository_setup.md) — GitHub settings, branch protection, CI checks
+- [Repository Standards](repository_standards.md) — branch naming, commit style, labels, milestones
