@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Generating feature graphics to ~/termux-icons/termux-feature-graphic.png..."
+echo "Generating tv banner to ~/termux-icons/termux-tv-banner.png..."
 mkdir -p ~/termux-icons/
 
 # The Android TV banner on google play (1280x720) has same aspect ratio
