@@ -288,6 +288,8 @@ public abstract class TermuxSharedProperties {
             /* String (may be null) */
             case TermuxPropertyConstants.KEY_BACK_KEY_BEHAVIOUR:
                 return (String) getBackKeyBehaviourInternalPropertyValueFromValue(value);
+            case TermuxPropertyConstants.KEY_BACKSPACE_BEHAVIOUR:
+                return (String) getBackspaceBehaviourInternalPropertyValueFromValue(value);
             case TermuxPropertyConstants.KEY_DEFAULT_WORKING_DIRECTORY:
                 return (String) getDefaultWorkingDirectoryInternalPropertyValueFromValue(value);
             case TermuxPropertyConstants.KEY_EXTRA_KEYS:
@@ -499,6 +501,16 @@ public abstract class TermuxSharedProperties {
     }
 
     /**
+     * Returns the value itself if it is not {@code null}, otherwise returns {@link TermuxPropertyConstants#DEFAULT_IVALUE_BACKSPACE_BEHAVIOUR}.
+     *
+     * @param value {@link String} value to convert.
+     * @return Returns the internal value for value.
+     */
+    public static String getBackspaceBehaviourInternalPropertyValueFromValue(String value) {
+        return (String) SharedProperties.getDefaultIfNotInMap(TermuxPropertyConstants.KEY_BACKSPACE_BEHAVIOUR, TermuxPropertyConstants.MAP_BACKSPACE_BEHAVIOUR, SharedProperties.toLowerCase(value), TermuxPropertyConstants.DEFAULT_IVALUE_BACKSPACE_BEHAVIOUR, true, LOG_TAG);
+    }
+
+    /**
      * Returns the path itself if a directory exists at it and is readable, otherwise returns
      *  {@link TermuxPropertyConstants#DEFAULT_IVALUE_DEFAULT_WORKING_DIRECTORY}.
      *
@@ -660,6 +672,10 @@ public abstract class TermuxSharedProperties {
 
     public boolean isBackKeyTheEscapeKey() {
         return (boolean) TermuxPropertyConstants.IVALUE_BACK_KEY_BEHAVIOUR_ESCAPE.equals(getInternalPropertyValue(TermuxPropertyConstants.KEY_BACK_KEY_BEHAVIOUR, true));
+    }
+
+    public boolean isBackspaceTheBSKey() {
+        return (boolean) TermuxPropertyConstants.IVALUE_BACKSPACE_BEHAVIOUR_BS.equals(getInternalPropertyValue(TermuxPropertyConstants.KEY_BACKSPACE_BEHAVIOUR, true));
     }
 
     public String getDefaultWorkingDirectory() {

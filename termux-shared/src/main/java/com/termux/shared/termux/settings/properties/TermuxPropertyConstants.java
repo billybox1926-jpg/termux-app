@@ -80,6 +80,9 @@ import java.util.Set;
  *
  * - 0.18.0 (2022-06-13)
  *      - Add `KEY_DISABLE_FILE_SHARE_RECEIVER` and `KEY_DISABLE_FILE_VIEW_RECEIVER`.
+ *
+ * - 0.19.0 (2026-06-12)
+ *      - Add `KEY_BACKSPACE_BEHAVIOUR` for issue #212.
  */
 
 /**
@@ -300,6 +303,22 @@ public final class TermuxPropertyConstants {
 
     /* String */
 
+    /** Defines the key for backspace key behaviour - DEL (default) or BS */
+    public static final String KEY_BACKSPACE_BEHAVIOUR =  "backspace-behaviour"; // Default: "backspace-behaviour"
+
+    public static final String IVALUE_BACKSPACE_BEHAVIOUR_DEL = "del";
+    public static final String IVALUE_BACKSPACE_BEHAVIOUR_BS = "bs";
+    public static final String DEFAULT_IVALUE_BACKSPACE_BEHAVIOUR = IVALUE_BACKSPACE_BEHAVIOUR_DEL;
+
+    /** Defines the bidirectional map for backspace behaviour values and their internal values */
+    public static final ImmutableBiMap<String, String> MAP_BACKSPACE_BEHAVIOUR =
+        new ImmutableBiMap.Builder<String, String>()
+            .put(IVALUE_BACKSPACE_BEHAVIOUR_DEL, IVALUE_BACKSPACE_BEHAVIOUR_DEL)
+            .put(IVALUE_BACKSPACE_BEHAVIOUR_BS, IVALUE_BACKSPACE_BEHAVIOUR_BS)
+            .build();
+
+
+
     /** Defines the key for whether back key will behave as escape key or literal back key */
     public static final String KEY_BACK_KEY_BEHAVIOUR =  "back-key"; // Default: "back-key"
 
@@ -425,6 +444,7 @@ public final class TermuxPropertyConstants {
 
         /* String */
         KEY_BACK_KEY_BEHAVIOUR,
+        KEY_BACKSPACE_BEHAVIOUR,
         KEY_DEFAULT_WORKING_DIRECTORY,
         KEY_EXTRA_KEYS,
         KEY_EXTRA_KEYS_STYLE,

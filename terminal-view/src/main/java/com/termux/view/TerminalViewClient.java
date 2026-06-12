@@ -30,6 +30,8 @@ public interface TerminalViewClient {
 
     boolean shouldBackButtonBeMappedToEscape();
 
+    boolean shouldBackspaceSendBS();
+
     boolean shouldEnforceCharBasedInput();
 
     boolean shouldUseCtrlSpaceWorkaround();

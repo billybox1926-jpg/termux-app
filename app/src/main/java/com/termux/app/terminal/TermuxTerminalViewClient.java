@@ -215,6 +215,11 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
     }
 
     @Override
+    public boolean shouldBackspaceSendBS() {
+        return mActivity.getProperties().isBackspaceTheBSKey();
+    }
+
+    @Override
     public boolean shouldEnforceCharBasedInput() {
         return mActivity.getProperties().isEnforcingCharBasedInput();
     }
@@ -462,7 +467,11 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
 
             if (resultingKeyCode != -1) {
                 TerminalEmulator term = session.getEmulator();
-                session.write(KeyHandler.getCode(resultingKeyCode, 0, term.isCursorKeysApplicationMode(), term.isKeypadApplicationMode()));
+                String code = KeyHandler.getCode(resultingKeyCode, 0, term.isCursorKeysApplicationMode(), term.isKeypadApplicationMode());
+                if (resultingKeyCode == KeyEvent.KEYCODE_DEL && shouldBackspaceSendBS()) {
+                    code = code.replace('\u007F', '\u0008');
+                }
+                session.write(code);
             } else if (resultingCodePoint != -1) {
                 session.writeCodePoint(altDown, resultingCodePoint);
             }

@@ -25,6 +25,10 @@ public class TermuxTerminalViewClientBase implements TerminalViewClient {
         return false;
     }
 
+    public boolean shouldBackspaceSendBS() {
+        return false;
+    }
+
     public boolean shouldEnforceCharBasedInput() {
         return false;
     }
