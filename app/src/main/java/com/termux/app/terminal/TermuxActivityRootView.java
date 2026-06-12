@@ -68,6 +68,7 @@ public class TermuxActivityRootView extends LinearLayout implements ViewTreeObse
     public Integer lastMarginBottom;
     public long lastMarginBottomTime;
     public long lastMarginBottomExtraTime;
+    private Boolean mLastKeyboardVisible;
 
     /** Log root view events. */
     private boolean ROOT_VIEW_LOGGING_ENABLED = false;
@@ -268,6 +269,19 @@ public class TermuxActivityRootView extends LinearLayout implements ViewTreeObse
             } else {
                 if (root_view_logging_enabled)
                     Logger.logVerbose(LOG_TAG, "Bottom margin already equals " + pxHidden);
+            }
+        }
+
+        // Issue #140: Show extra keys row when keyboard is visible, hide when hidden.
+        // isVisible==true means keyboard is closed; isVisible==false means keyboard is open.
+        // Ignore isVisibleBecauseMargin corrections (those happen while keyboard stays open).
+        if (!isVisibleBecauseMargin && !isVisibleBecauseExtraMargin) {
+            boolean keyboardVisible = !isVisible;
+            if (mLastKeyboardVisible == null || mLastKeyboardVisible != keyboardVisible) {
+                mLastKeyboardVisible = keyboardVisible;
+                if (mActivity != null) {
+                    mActivity.setExtraKeysVisibilityForKeyboard(keyboardVisible);
+                }
             }
         }
     }
