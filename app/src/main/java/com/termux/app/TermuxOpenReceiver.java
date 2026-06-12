@@ -81,10 +81,12 @@ public class TermuxOpenReceiver extends BroadcastReceiver {
         }
 
         final File fileToShare = new File(filePath);
-        if (!(fileToShare.isFile() && fileToShare.canRead())) {
-            Logger.logError(LOG_TAG, "Not a readable file: '" + fileToShare.getAbsolutePath() + "'");
+        if (!fileToShare.isFile()) {
+            Logger.logError(LOG_TAG, "Not a file: '" + fileToShare.getAbsolutePath() + "'");
             return;
         }
+        // Note: canRead() may return false on Android 12+ due to scoped storage,
+        // but the ContentProvider can still serve the file to other apps. (#3565)
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(intentAction);
